@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name">Termostato</string>
+    <string name="title_home">Termostato</string>
+    <string name="title_sensors">Sensori</string>
+    <string name="title_settings">Impostazioni</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Log in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+
+
+    <!--preferences-->
+    <string name="preference_login_title">Login/Logout</string>
+    <string name="preference_login_details">Seleziona per effettuare il logout</string>
+    <string name="preference_thermostat_select_title">Seleziona termostato</string>
+    <string name="preference_thermostat_select_details"></string>
+    <string name="preference_thermostat_active_title">Attiva termostato</string>
+    <string name="preference_thermostat_active_details"></string>
+    <string name="preference_thermostat_mode_select_title">Seleziona modalità</string>
+    <string name="preference_thermostat_mode_select_details"></string>
+
+    <string name="login_request">Sei sicuro voler effettuare il logout?</string>
+    <string name="button_ok">Ok</string>
+    <string name="button_cancel">Cancel</string>
+
+    <string name="thermostat_selection_empty">Nessun termostato selezionato</string>
+    <string-array name="preferences_mode">
+        <item>Manuale</item>
+        <item>Programma</item>
+        <item>Automatica</item>
+    </string-array>
+
+    <string-array name="preferences_mode_values">
+        <item>manual_mode</item>
+        <item>program_mode</item>
+        <item>auto_mode</item>
+    </string-array>
+
+
+
+    <!-- Thermostat fragment -->
+    <string name="sensor_avg">Media</string>
+    <string name="thermostat_not_active">Termostato non attivo, attiva dalle impostazioni</string>
+    <string name="last_update">ultima rilevazione:\n</string>
+    <string name="measurement_miss">Nessuna misurazione disponibile</string>
+
+
+    <!-- Sensor Fragment -->
+    <string name="sensor_min">Minima</string>
+    <string name="sensor_max">Massima</string>
+
+    <string name="server_url">https://graziano-thermostat.herokuapp.com</string>
+    <string name="http_error_parse">Error parsing response</string>
+    <string name="http_error_bad_response">Request error; [status_code: ${error}]</string>
+
+
+</resources>

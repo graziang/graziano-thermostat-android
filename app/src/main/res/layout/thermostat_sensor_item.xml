@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:layout_alignParentBottom="true"
+    android:orientation="horizontal"
+    android:background="@drawable/round_item">
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+        <TextView
+            android:id="@+id/sensor_measurement_last"
+            android:layout_height="32dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:textSize="22sp"
+            />
+
+        <TextView
+            android:id="@+id/sensor_name"
+            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_below="@+id/sensor_measurement_last"
+            android:layout_centerInParent="true"
+            android:textSize="15sp"
+            />
+
+    </RelativeLayout>
+</RelativeLayout>
