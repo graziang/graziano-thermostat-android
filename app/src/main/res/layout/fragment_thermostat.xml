@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorBackground"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
 
 
@@ -11,9 +12,9 @@
         android:id="@+id/thermostatNameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:textColor="@color/colorTextPrimary"
-        android:textSize="35sp"
+        android:textSize="25sp"
         android:gravity="center"
         android:layout_alignParentTop="true"/>
 
@@ -24,19 +25,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/colorTextPrimary"
-        android:textSize="15sp"
+        android:textSize="13sp"
         />
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_above="@id/sensors_measurements_scrollview"
         android:layout_below="@id/thermostatLastMeasurementDateTextView">
 
     <pl.bclogic.pulsator4droid.library.PulsatorLayout
         android:id="@+id/pulsator"
-        android:layout_width="330dp"
-        android:layout_height="330dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:gravity="center"
         app:pulse_count="4"
@@ -48,8 +50,9 @@
 
         <Button
             android:id="@+id/status"
-            android:layout_width="260dp"
-            android:layout_height="260dp"
+            android:layout_width="00dp"
+            android:layout_height="00dp"
+            android:layout_margin="30dp"
             android:layout_centerInParent="true"
             android:background="@drawable/round_item"/>
 
@@ -59,8 +62,9 @@
 
     <io.feeeei.circleseekbar.CircleSeekBar
         android:id="@+id/thermostatSeekBar"
-        android:layout_width="280dp"
-        android:layout_height="280dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="30dp"
         android:layout_centerInParent="true"
         app:wheel_reached_color="@color/colorCursorBar"
         app:wheel_unreached_color="@color/colorBackgroundDark"
@@ -90,7 +94,7 @@
     <com.yarolegovich.discretescrollview.DiscreteScrollView
         android:id="@+id/sensors_measurements_scrollview"
         android:layout_width="match_parent"
-        android:layout_height="115dp"
+        android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="70dp"
         app:dsv_orientation="horizontal" />

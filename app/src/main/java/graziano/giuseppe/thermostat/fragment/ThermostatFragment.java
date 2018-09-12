@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.yarolegovich.discretescrollview.DiscreteScrollView;
 import com.yarolegovich.discretescrollview.InfiniteScrollAdapter;
 import com.yarolegovich.discretescrollview.transform.Pivot;
@@ -29,6 +30,8 @@ import org.w3c.dom.Text;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -39,13 +42,14 @@ import graziano.giuseppe.thermostat.MainActivity;
 import graziano.giuseppe.thermostat.R;
 import graziano.giuseppe.thermostat.adapter.ThermostatSensorRecyclerViewAdapter;
 import graziano.giuseppe.thermostat.data.model.Measurement;
+import graziano.giuseppe.thermostat.data.model.Sensor;
 import graziano.giuseppe.thermostat.data.model.Thermostat;
 import graziano.giuseppe.thermostat.network.HttpClient;
 import io.feeeei.circleseekbar.CircleSeekBar;
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
 
-public class ThermostatFragment extends Fragment  implements Response.Listener{
+public class ThermostatFragment extends Fragment  implements Response.Listener, Response.ErrorListener{
 
 
     private final int timerPeriod = 3000;
@@ -222,9 +226,10 @@ public class ThermostatFragment extends Fragment  implements Response.Listener{
 
             }
 
-
-
         }
+      //  PulsatorLayout pulsatorLayout = view.findViewById(R.id.pulsator);
+       // pulsatorLayout.setAlpha(1);
+       // pulsatorLayout.start();
         thermostatSeakBar.setOnSeekBarChangeListener(new CircleSeekBar.OnSeekBarChangeListener() {
             @Override
             public void onChanged(CircleSeekBar circleSeekBar, int i) {
@@ -274,9 +279,9 @@ public class ThermostatFragment extends Fragment  implements Response.Listener{
             thermostat.setTemperature(this.thermostatTemperature);
 
             if (measurementsScrollView.getScrollState() == RecyclerView.SCROLL_STATE_IDLE){
-                HttpClient.putThermostat(thermostat, this, null);
+                HttpClient.putThermostat(thermostat, this, this);
             }
-            HttpClient.getMeasurementsLast(thermostat.getId(), this, null);
+            HttpClient.getMeasurementsLast(thermostat.getId(), this, this);
         }
 
 
@@ -304,9 +309,17 @@ public class ThermostatFragment extends Fragment  implements Response.Listener{
         }
         if(response instanceof List){
             List<Measurement> measurements = (List<Measurement>) response;
+
+            measurements = new ArrayList<>(measurements);
+            Collections.sort(measurements, new Comparator<Measurement>() {
+                @Override
+                public int compare(Measurement o1, Measurement o2) {
+                    return o1.getSensor().getName().compareTo(o2.getSensor().getName());
+                }
+            });
             float avg = 0;
             for (Measurement measurement: measurements){
-                avg = measurement.getTemperature();
+                avg += measurement.getTemperature();
             }
             avg = avg / measurements.size();
             Measurement measurementAgv = new Measurement();
@@ -321,5 +334,10 @@ public class ThermostatFragment extends Fragment  implements Response.Listener{
 
 
         }
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        error.toString();
     }
 }

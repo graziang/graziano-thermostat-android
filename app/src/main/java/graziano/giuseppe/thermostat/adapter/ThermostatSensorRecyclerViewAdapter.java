@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import graziano.giuseppe.thermostat.MainActivity;
@@ -60,7 +62,9 @@ public class ThermostatSensorRecyclerViewAdapter extends RecyclerView.Adapter<Th
             holder.sensorNameTextView.setText(measurement.getSensor().getName());
         }
 
-        holder.lastTemperatureMeasurementTextView.setText(String.format("%s°C", measurement.getTemperature()));
+        BigDecimal bd = new BigDecimal( measurement.getTemperature()).setScale(1, RoundingMode.HALF_EVEN);
+
+        holder.lastTemperatureMeasurementTextView.setText(String.format("%s°C", bd.floatValue()));
 
 
         sensorMeasurementLastTextView.setTypeface(null, Typeface.NORMAL);

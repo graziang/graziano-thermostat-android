@@ -44,7 +44,6 @@
     </string-array>
 
 
-
     <!-- Thermostat fragment -->
     <string name="sensor_avg">Media</string>
     <string name="thermostat_not_active">Termostato non attivo, attiva dalle impostazioni</string>
@@ -59,6 +58,9 @@
     <string name="server_url">https://graziano-thermostat.herokuapp.com</string>
     <string name="http_error_parse">Error parsing response</string>
     <string name="http_error_bad_response">Request error; [status_code: ${error}]</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

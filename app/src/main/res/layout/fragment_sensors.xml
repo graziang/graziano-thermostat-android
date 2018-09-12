@@ -9,5 +9,8 @@
     android:layout_height="match_parent"
     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
     tools:context=".fragment.SensorsFragment"
+    android:orientation="vertical"
+    android:layout_marginBottom="60dp"
+    android:background="@color/colorBackground"
     tools:listitem="@layout/sensor_item" >
 </android.support.v7.widget.RecyclerView>

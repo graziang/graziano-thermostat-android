@@ -2,16 +2,11 @@ package graziano.giuseppe.thermostat.adapter;
 
 import android.content.Context;
 
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
@@ -21,7 +16,7 @@ import graziano.giuseppe.thermostat.R;
 
 import graziano.giuseppe.thermostat.data.model.Sensor;
 import graziano.giuseppe.thermostat.data.model.SensorStats;
-import graziano.giuseppe.thermostat.network.HttpClient;
+import graziano.giuseppe.thermostat.fragment.SensorsFragment;
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
 
@@ -30,12 +25,13 @@ public class SensorsRecyclerViewAdapter extends RecyclerView.Adapter<SensorsRecy
 
     private final Context context;
     private List<Sensor> sensors;
+    private final SensorsFragment.OnListFragmentInteractionListener mListener;
 
-
-    public SensorsRecyclerViewAdapter(List<Sensor> sensors, Context context) {
+    public SensorsRecyclerViewAdapter(List<Sensor> sensors, Context context, SensorsFragment.OnListFragmentInteractionListener mListener) {
 
         this.sensors = sensors;
         this.context = context;
+        this.mListener = mListener;
     }
 
     @Override
@@ -94,7 +90,16 @@ public class SensorsRecyclerViewAdapter extends RecyclerView.Adapter<SensorsRecy
         }
 
 
-
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    mListener.OnListFragmentInteractionListener(sensor );
+                }
+            }
+        });
 
     }
 

@@ -18,6 +18,7 @@ import java.util.List;
 
 import graziano.giuseppe.thermostat.MainActivity;
 import graziano.giuseppe.thermostat.R;
+import graziano.giuseppe.thermostat.data.model.Measurement;
 import graziano.giuseppe.thermostat.data.model.Thermostat;
 import graziano.giuseppe.thermostat.network.request.BasicAuthRequest;
 import graziano.giuseppe.thermostat.network.request.MeasurementListRequest;
@@ -51,6 +52,7 @@ public class HttpClient {
     private static String ENDPOINT_PUT_THERMOSTAT = "/thermostat/thermostat?thermostat_id=${thermostat_id}";
     private static String ENDPOINT_PUT_USER_THERMOSTAT_SELECT = "/thermostat/user/thermostat/select?thermostat_id=${thermostat_id}";
     private static String ENDPOINT_GET_MEASUREMENTS_LAST = "/thermostat/measurements/last?thermostat_id=${thermostat_id}";
+    private static String ENDPOINT_GET_MEASUREMENTS = "/thermostat/measurements?thermostat_id=${thermostat_id}&sensor_id=${sensor_id}";
     private static String ENDPOINT_GET_SENSOR_STATS = "/thermostat/measurements/stats?thermostat_id=${thermostat_id}&sensor_id=${sensor_id}";
     private static String ENDPOINT_GET_SENSOR_STATS_FROM = ENDPOINT_GET_SENSOR_STATS + "&date_from=${date_from}";
     private static String ENDPOINT_GET_SENSOR_STATS_TO = ENDPOINT_GET_SENSOR_STATS + "&date_to=${date_to}";
@@ -102,6 +104,15 @@ public class HttpClient {
         url = url.replace(PLACEHOLDER_SENSOR_ID, String.valueOf(sensorId));
         SensorStatsRequest sensorStatsRequest = new SensorStatsRequest(Request.Method.GET, url, null, listener, errorListener ,MainActivity.user.getUsername(), MainActivity.user.getPassword());
         queue.add(sensorStatsRequest);
+    }
+
+
+    public static void getMeasurements(Long id, Long sensorId, Response.Listener<BasicAuthRequest> listener, Response.ErrorListener errorListener){
+        String url = URL_SERVER + ENDPOINT_GET_MEASUREMENTS;
+        url = url.replace(PLACEHOLDER_THERMOSTAT_ID, String.valueOf(id));
+        url = url.replace(PLACEHOLDER_SENSOR_ID, String.valueOf(sensorId));
+        MeasurementListRequest measurementListRequest = new MeasurementListRequest(Request.Method.GET, url, null, listener, errorListener ,MainActivity.user.getUsername(), MainActivity.user.getPassword());
+        queue.add(measurementListRequest);
     }
 
     public static void getSensorStatsFrom(Long id, Long sensorId, Long dateTimestampFrom, Response.Listener<BasicAuthRequest> listener, Response.ErrorListener errorListener){
