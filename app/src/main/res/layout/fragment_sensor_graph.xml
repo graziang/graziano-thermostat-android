@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    android:layout_marginBottom="60dp">
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorBackground"
+
+            tools:context=".fragment.SensorGraphFragment">
+
+            <TextView
+                android:id="@+id/sensorNameTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="25sp"
+                android:gravity="center"
+                android:layout_alignParentTop="true"/>
+
+
+
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_height="300dp"
+                android:layout_below="@id/sensorNameTextView"
+                android:id="@+id/graph" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/temperature_min_container"
+                android:background="@color/colorBackgroundDark"
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/graph">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/temperature_min"
+                    android:textColor="@color/colorTextPrimary"
+                    android:gravity="center"
+                    android:textSize="15pt"/>
+
+
+                <!--    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="true"
+                        android:id="@+id/temperature_min_date"
+                        android:textColor="@color/colorTextPrimary"
+                        android:text="DATAAA"
+                        android:textSize="5pt"/>
+            -->
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/temperature_max_container"
+                android:layout_marginTop="5dp"
+                android:background="@color/colorBackgroundDark"
+                android:layout_below="@id/temperature_min_container">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/temperature_max"
+                    android:textColor="@color/colorTextPrimary"
+                    android:gravity="center"
+                    android:textSize="15pt"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:id="@+id/temperature_avg_container"
+                android:layout_below="@id/temperature_max_container">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/temperature_avg"
+                    android:background="@color/colorBackgroundDark"
+                    android:textColor="@color/colorTextPrimary"
+                    android:gravity="center"
+                    android:textSize="15pt"/>
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </ScrollView>
