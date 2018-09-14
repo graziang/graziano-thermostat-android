@@ -1,21 +1,18 @@
 package graziano.giuseppe.thermostat;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 
 import graziano.giuseppe.thermostat.data.model.Sensor;
 import graziano.giuseppe.thermostat.data.model.Thermostat;
@@ -23,14 +20,15 @@ import graziano.giuseppe.thermostat.data.model.User;
 import graziano.giuseppe.thermostat.fragment.SensorGraphFragment;
 import graziano.giuseppe.thermostat.fragment.SensorsFragment;
 import graziano.giuseppe.thermostat.fragment.SettingsFragment;
-import graziano.giuseppe.thermostat.fragment.ThermostatFragment;
+import graziano.giuseppe.thermostat.fragment.ThermostatFragmentManual;
+import graziano.giuseppe.thermostat.fragment.ThermostatFragmentProgram;
 import graziano.giuseppe.thermostat.network.HttpClient;
-import graziano.giuseppe.thermostat.network.request.BasicAuthRequest;
 
 public class
 MainActivity extends AppCompatActivity implements SensorsFragment.OnListFragmentInteractionListener{
 
     public static User user = new User();
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -39,7 +37,23 @@ MainActivity extends AppCompatActivity implements SensorsFragment.OnListFragment
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    Fragment thermostatFragment = ThermostatFragment.newInstance();
+
+
+                    Thermostat thermostat = MainActivity.user.getSelectedThermostat();
+                    if(thermostat != null){
+                        if(thermostat.getMode().equals(Thermostat.PROGRAM_MODE)){
+                            Fragment thermostatFragment = ThermostatFragmentProgram.newInstance();
+                            openFragment(thermostatFragment);
+                            return true;
+                        }
+                        if(thermostat.getMode().equals(Thermostat.MANUAL_MODE)){
+                            Fragment thermostatFragment = ThermostatFragmentManual.newInstance();
+                            openFragment(thermostatFragment);
+                            return true;
+                        }
+                    }
+
+                    Fragment thermostatFragment = ThermostatFragmentManual.newInstance();
                     openFragment(thermostatFragment);
                     return true;
                 case R.id.navigation_sensors:
@@ -56,15 +70,30 @@ MainActivity extends AppCompatActivity implements SensorsFragment.OnListFragment
         }
     };
 
+    @Override
+    public void onResume(){
+        super.onResume();
 
+        Thermostat thermostat = MainActivity.user.getSelectedThermostat();
+        if(thermostat != null){
+            if(thermostat.getMode().equals(Thermostat.PROGRAM_MODE)){
+                Fragment thermostatFragment = ThermostatFragmentProgram.newInstance();
+                openFragment(thermostatFragment);
+            }
+            if(thermostat.getMode().equals(Thermostat.MANUAL_MODE)){
+                Fragment thermostatFragment = ThermostatFragmentManual.newInstance();
+                openFragment(thermostatFragment);
+            }
+        }
+
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Fragment thermostatFragment = ThermostatFragment.newInstance();
-        openFragment(thermostatFragment);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

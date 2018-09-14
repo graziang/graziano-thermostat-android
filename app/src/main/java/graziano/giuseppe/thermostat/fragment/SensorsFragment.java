@@ -57,7 +57,7 @@ public class SensorsFragment extends Fragment implements Response.Listener, Resp
            // }
             sensors = new ArrayList<>();
             HttpClient.getMeasurementsLast(thermostat.getId(), this, this);
-           /* sensors = new ArrayList<>(thermostat.getSensors());
+           sensors = new ArrayList<>(thermostat.getSensors());
             Collections.sort(sensors, new Comparator<Sensor>() {
                 @Override
                 public int compare(Sensor o1, Sensor o2) {
@@ -68,7 +68,7 @@ public class SensorsFragment extends Fragment implements Response.Listener, Resp
             for (Sensor sensor: sensors){
                 HttpClient.getSensorStats(thermostat.getId(), sensor.getId(), this, this);
                // HttpClient.getSensorStatsFromTo(thermostat.getId(), sensor.getId(), System.currentTimeMillis() - (1000 * 60 * 60 * 24), System.currentTimeMillis(), this, this);
-            }*/
+            }
         }
     }
 
@@ -138,6 +138,8 @@ public class SensorsFragment extends Fragment implements Response.Listener, Resp
 
     @Override
     public void onErrorResponse(VolleyError error) {
+
+
         Log.e("", error.toString());
     }
 

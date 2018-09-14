@@ -8,6 +8,7 @@ public class Thermostat {
 
 
     public static String MANUAL_MODE = "manual_mode";
+    public static String PROGRAM_MODE = "program_mode";
 
     private long id;
 
