@@ -28,6 +28,8 @@ public class Thermostat {
 
     private ManualMode manualMode;
 
+    private ProgramMode programMode;
+
     private Set<Sensor> sensors = new HashSet<>();
 
 
@@ -118,6 +120,14 @@ public class Thermostat {
 
     public void setManualMode(ManualMode manualMode) {
         this.manualMode = manualMode;
+    }
+
+    public ProgramMode getProgramMode() {
+        return programMode;
+    }
+
+    public void setProgramMode(ProgramMode programMode) {
+        this.programMode = programMode;
     }
 
     @Override

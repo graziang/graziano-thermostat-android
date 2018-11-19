@@ -1,11 +1,13 @@
 package graziano.giuseppe.thermostat.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,14 +17,16 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import graziano.giuseppe.thermostat.MainActivity;
 import graziano.giuseppe.thermostat.R;
 import graziano.giuseppe.thermostat.adapter.ProgramRecyclerViewAdapter;
 import graziano.giuseppe.thermostat.data.model.Program;
+import graziano.giuseppe.thermostat.data.model.Sensor;
 
 
 public class ThermostatFragmentProgram extends Fragment{
 
-
+    private OnListFragmentInteractionListener mListener;
     private BottomSheetBehavior behavior;
     private BottomSheetDialogFragment programsBottomSheetDialog;
     private ProgramRecyclerViewAdapter programRecyclerViewAdapter;
@@ -50,7 +54,6 @@ public class ThermostatFragmentProgram extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
-
     }
 
     @Override
@@ -58,6 +61,24 @@ public class ThermostatFragmentProgram extends Fragment{
         super.onPause();
 
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnListFragmentInteractionListener) {
+            mListener = (OnListFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
 
     private void showBottomSheetDialog() {
 
@@ -89,19 +110,17 @@ public class ThermostatFragmentProgram extends Fragment{
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        List<Program> programs = new ArrayList();
+        List<Program> programs = new ArrayList<>(MainActivity.user.getSelectedThermostat().getProgramMode().getPrograms());
 
-        for (int i = 0; i < 10; i++){
-            Program program = new Program();
-            program.setName("eccolo " + i);
-
-            programs.add(program);
-        }
-
-        programRecyclerViewAdapter = new ProgramRecyclerViewAdapter(programs, getContext());
+        programRecyclerViewAdapter = new ProgramRecyclerViewAdapter(programs, getContext(), mListener);
         recyclerView.setAdapter(programRecyclerViewAdapter);
 
         return  view;
+    }
+
+    public interface OnListFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void OnListFragmentInteractionListener(Program program);
     }
 
 }

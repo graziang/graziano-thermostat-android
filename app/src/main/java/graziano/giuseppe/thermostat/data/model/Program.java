@@ -1,12 +1,13 @@
 package graziano.giuseppe.thermostat.data.model;
 
+import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
 
 
-public class Program {
+public class Program implements Serializable{
 
 
     private long id;

@@ -14,9 +14,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import graziano.giuseppe.thermostat.data.model.Program;
 import graziano.giuseppe.thermostat.data.model.Sensor;
 import graziano.giuseppe.thermostat.data.model.Thermostat;
 import graziano.giuseppe.thermostat.data.model.User;
+import graziano.giuseppe.thermostat.fragment.ProgramDialogFragment;
 import graziano.giuseppe.thermostat.fragment.SensorGraphFragment;
 import graziano.giuseppe.thermostat.fragment.SensorsFragment;
 import graziano.giuseppe.thermostat.fragment.SettingsFragment;
@@ -25,7 +27,7 @@ import graziano.giuseppe.thermostat.fragment.ThermostatFragmentProgram;
 import graziano.giuseppe.thermostat.network.HttpClient;
 
 public class
-MainActivity extends AppCompatActivity implements SensorsFragment.OnListFragmentInteractionListener{
+MainActivity extends AppCompatActivity implements SensorsFragment.OnListFragmentInteractionListener, ThermostatFragmentProgram.OnListFragmentInteractionListener{
 
     public static User user = new User();
 
@@ -133,5 +135,12 @@ MainActivity extends AppCompatActivity implements SensorsFragment.OnListFragment
             }
         }
 
+    }
+
+    @Override
+    public void OnListFragmentInteractionListener(Program program) {
+        FragmentManager fm = getSupportFragmentManager();
+        ProgramDialogFragment editNameDialogFragment = ProgramDialogFragment.newInstance(program);
+        editNameDialogFragment.show(fm, "fragment_edit_name");
     }
 }
