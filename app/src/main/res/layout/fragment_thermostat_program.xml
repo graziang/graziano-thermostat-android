@@ -29,6 +29,12 @@
         android:gravity="center"
         android:text="PROGRAMMMM!!!!"
         android:layout_alignParentTop="true"/>
+
+    <Button
+        android:id="@+id/addProgram"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aggiungi programma"/>
 </RelativeLayout>
 
 

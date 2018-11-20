@@ -17,7 +17,7 @@ public class BasicAuthRequest<T> extends JsonRequest<T> {
 
     private String username;
     private String password;
-    private Gson gson = new Gson();
+
 
     public BasicAuthRequest(int method, String url, String requestBody, Response.Listener listener, Response.ErrorListener errorListener, String username, String password) {
         super(method, url, requestBody, listener, errorListener);

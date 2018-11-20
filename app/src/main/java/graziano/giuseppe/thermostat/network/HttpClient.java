@@ -1,7 +1,8 @@
 package graziano.giuseppe.thermostat.network;
 
+import android.annotation.TargetApi;
 import android.content.Context;
-import android.util.Log;
+import android.os.Build;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -10,15 +11,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
+import java.time.LocalTime;
 
 import graziano.giuseppe.thermostat.MainActivity;
 import graziano.giuseppe.thermostat.R;
-import graziano.giuseppe.thermostat.data.model.Measurement;
+import graziano.giuseppe.thermostat.adapter.LocalTimeJsonDeserializer;
+import graziano.giuseppe.thermostat.adapter.LocalTimeJsonSerializer;
 import graziano.giuseppe.thermostat.data.model.Thermostat;
 import graziano.giuseppe.thermostat.network.request.BasicAuthRequest;
 import graziano.giuseppe.thermostat.network.request.MeasurementListRequest;
@@ -61,9 +64,10 @@ public class HttpClient {
 
     private static String ENDPOINT_POST_FAMILY = "/family";
 
+    @TargetApi(Build.VERSION_CODES.O)
     public static void initialize(Context context){
         queue = Volley.newRequestQueue(context);
-        gson = new Gson();
+        gson = new GsonBuilder().registerTypeAdapter(LocalTime.class, new LocalTimeJsonSerializer()).registerTypeAdapter(LocalTime.class, new LocalTimeJsonDeserializer()).create();
         URL_SERVER = context.getString(R.string.server_url);
         ERROR_PARSING_MESSAGE = context.getString(R.string.http_error_parse);
         ERROR_BAD_RESPONSE = context.getString(R.string.http_error_bad_response);
@@ -77,11 +81,20 @@ public class HttpClient {
         queue.add(login);
     }
 
-    public static void putThermostat(Thermostat thermostat, Response.Listener<BasicAuthRequest> listener, Response.ErrorListener errorListener){
+    public static void putThermostat(Thermostat thermostat, Response.Listener<BasicAuthRequest> listener, Response.ErrorListener errorListener) {
         String url = URL_SERVER + ENDPOINT_PUT_THERMOSTAT;
         url = url.replace(PLACEHOLDER_THERMOSTAT_ID, String.valueOf(thermostat.getId()));
+        try {
+
+
         ThermostatRequest login = new ThermostatRequest(Request.Method.PUT, url, gson.toJson(thermostat), listener, errorListener ,MainActivity.user.getUsername(), MainActivity.user.getPassword());
-        queue.add(login);
+       // ThermostatRequest login = new ThermostatRequest(Request.Method.PUT, url, new ObjectMapper().writeValueAsString(thermostat), listener, errorListener ,MainActivity.user.getUsername(), MainActivity.user.getPassword());
+            queue.add(login);
+        }
+        catch (Exception e){
+
+        }
+      ;
     }
 
     public static void putUserThermostat(Long id, Response.Listener<BasicAuthRequest> listener, Response.ErrorListener errorListener){

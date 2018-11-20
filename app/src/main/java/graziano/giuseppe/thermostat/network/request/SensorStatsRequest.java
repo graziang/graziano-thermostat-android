@@ -11,16 +11,20 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.UnsupportedEncodingException;
+import java.time.LocalTime;
 import java.util.Map;
 
+import graziano.giuseppe.thermostat.adapter.LocalTimeJsonDeserializer;
 import graziano.giuseppe.thermostat.data.model.SensorStats;
 import graziano.giuseppe.thermostat.data.model.Thermostat;
 
 public class SensorStatsRequest extends BasicAuthRequest<SensorStats> {
 
-    private Gson gson = new Gson();
+    private Gson gson = new GsonBuilder().registerTypeAdapter(LocalTime.class, new LocalTimeJsonDeserializer()).create();
+
 
     public SensorStatsRequest(int method, String url, String requestBody, Listener listener, ErrorListener errorListener, String username, String password) {
         super(method, url, requestBody, listener, errorListener, username, password);

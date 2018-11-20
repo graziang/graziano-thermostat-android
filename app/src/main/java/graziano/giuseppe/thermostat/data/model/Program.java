@@ -1,27 +1,29 @@
 package graziano.giuseppe.thermostat.data.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.time.DayOfWeek;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Objects;
 
 
 public class Program implements Serializable{
 
 
-    private long id;
+    private long id = 0L;
 
     private String name;
     private String description;
     private boolean active;
     private boolean repete;
     private DayOfWeek weekDay;
+
     private LocalTime startTime;
+
     private LocalTime endTime;
     private long sourceId;
     private boolean sourceOn;
-
+    @JsonIgnore
     private ProgramMode programMode;
 
     public long getId() {

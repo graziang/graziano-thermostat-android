@@ -13,34 +13,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <TextView
-        android:id="@+id/sensorNameTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/colorTextPrimary"
-        android:textSize="25sp"
-        android:gravity="center"
-        android:text="@string/week_day"/>
+
+
 
     <NumberPicker
-        android:id="@+id/weekDay"
+        android:id="@+id/weekDayPiker"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        android:layout_margin="14dp"/>
 
     <ToggleButton
         android:id="@+id/toggleButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textOn="@string/time_start"
-        android:textOff="@string/time_end"
-        android:text="ToggleButton" />
+        android:textOn="@string/time_end"
+        android:textOff="@string/time_start"
+        android:text="ToggleButton"
+        android:layout_margin="10dp"/>
 
     <TimePicker
-        android:id="@+id/timeFrom"
+        android:id="@+id/timePiker"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"/>
+
 </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

@@ -46,12 +46,14 @@ public class ProgramRecyclerViewAdapter extends RecyclerView.Adapter<ProgramRecy
 
         Program program = this.programs.get(position);
 
-        holder.programNameTextView.setText(programs.get(position).getName());
+        String text = programs.get(position).getWeekDay().toString() + " - " + program.getStartTime().toString() + " a " + program.getEndTime().toString();
+
+        holder.programNameTextView.setText(text);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, holder.programNameTextView.getText(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, holder.programNameTextView.getText(), Toast.LENGTH_SHORT).show();
                 mListener.OnListFragmentInteractionListener(program);
             }
         });

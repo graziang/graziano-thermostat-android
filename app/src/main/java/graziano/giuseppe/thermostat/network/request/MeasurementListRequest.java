@@ -11,18 +11,22 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.UnsupportedEncodingException;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
+import graziano.giuseppe.thermostat.adapter.LocalTimeJsonDeserializer;
 import graziano.giuseppe.thermostat.data.model.Measurement;
 import graziano.giuseppe.thermostat.data.model.Thermostat;
 
 public class MeasurementListRequest extends BasicAuthRequest<List<Measurement>> {
 
-    private Gson gson = new Gson();
+    private Gson gson = new GsonBuilder().registerTypeAdapter(LocalTime.class, new LocalTimeJsonDeserializer()).create();
+
 
     public MeasurementListRequest(int method, String url, String requestBody, Listener listener, ErrorListener errorListener, String username, String password) {
         super(method, url, requestBody, listener, errorListener, username, password);
