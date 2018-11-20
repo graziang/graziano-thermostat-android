@@ -5,8 +5,43 @@
     android:layout_gravity="center" android:orientation="vertical"
     tools:context=".fragment.ProgramDialogFragment">
 
-    <TextView
-        android:id="@+id/weekDay" android:text="Week day"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/sensorNameTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="25sp"
+        android:gravity="center"
+        android:text="@string/week_day"/>
+
+    <NumberPicker
+        android:id="@+id/weekDay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textOn="@string/time_start"
+        android:textOff="@string/time_end"
+        android:text="ToggleButton" />
+
+    <TimePicker
+        android:id="@+id/timeFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>
+

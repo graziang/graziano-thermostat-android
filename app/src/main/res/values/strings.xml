@@ -55,14 +55,31 @@
     <string name="sensor_min">Minima</string>
     <string name="sensor_max">Massima</string>
 
-    <!-- <string name="server_url">https://graziano-thermostat.herokuapp.com</string>-->
-    <string name="server_url">http://192.168.1.205:8091</string>
+    <string name="week_day">Seleziona giorno della settimana</string>
+    <string name="time_start">Accensione</string>
+    <string name="time_end">Spegnimento</string>
+
+    <string-array name="week_days">
+        <item>Lunedì</item>
+        <item>Martedì</item>
+        <item>Mercoledì</item>
+        <item>Giovedì</item>
+        <item>Venerdì</item>
+        <item>Sabato</item>
+        <item>Domenica</item>
+    </string-array>
+
+
+     <string name="server_url">https://graziano-thermostat.herokuapp.com</string>
+   <!-- <string name="server_url">http://192.168.1.205:8091</string>-->
 
     <string name="http_error_parse">Error parsing response</string>
     <string name="http_error_bad_response">Request error; [status_code: ${error}]</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
 
 
 </resources>
