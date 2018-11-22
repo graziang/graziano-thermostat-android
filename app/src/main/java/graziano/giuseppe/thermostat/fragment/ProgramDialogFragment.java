@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -84,7 +86,7 @@ public class ProgramDialogFragment extends DialogFragment {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.O)
+/*    @TargetApi(Build.VERSION_CODES.O)
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -219,6 +221,130 @@ public class ProgramDialogFragment extends DialogFragment {
         return dialog;
 
 
+    }*/
+
+    @TargetApi(Build.VERSION_CODES.O)
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_program_dialog, null);
+
+        numberPikerWeekDay = (NumberPicker) view.findViewById(R.id.weekDayPiker);
+        timePicker = (TimePicker) view.findViewById(R.id.timePiker);
+        toggleButton = (ToggleButton) view.findViewById(R.id.toggleButton);
+
+        final String days[] = getResources().getStringArray(R.array.week_days);
+
+
+        numberPikerWeekDay.setMinValue(0);
+        numberPikerWeekDay.setMaxValue(DayOfWeek.values().length - 1);
+        numberPikerWeekDay.setDisplayedValues(days);
+        numberPikerWeekDay.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        NumberPicker.OnValueChangeListener myValChangedListener = new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                //  Toast..setText("Value: " + days[newVal]);
+                //  Toast.makeText(getContext(), DayOfWeek.values()[newVal].toString(), Toast.LENGTH_SHORT).show();
+
+            }
+        };
+        numberPikerWeekDay.setValue(Arrays.asList(days).indexOf(program.getWeekDay()));
+
+
+        numberPikerWeekDay.setOnValueChangedListener(myValChangedListener);
+
+        if(toggleButton.isChecked()){
+            timePicker.setHour(program.getEndTime().getHour());
+            timePicker.setMinute(program.getEndTime().getMinute());
+        }
+        else {
+            timePicker.setHour(program.getStartTime().getHour());
+            timePicker.setMinute(program.getStartTime().getMinute());
+        }
+
+        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                statusChange = true;
+                if(isChecked){
+
+                    timePicker.setHour(program.getEndTime().getHour());
+                    timePicker.setMinute(program.getEndTime().getMinute());
+
+                }
+                else {
+                    timePicker.setHour(program.getStartTime().getHour());
+                    timePicker.setMinute(program.getStartTime().getMinute());
+
+                }
+            }
+        });
+
+
+        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                if(statusChange){
+                    statusChange = false;
+                    return;
+                }
+                if(toggleButton.isChecked()){
+                    program.setEndTime(LocalTime.of(hourOfDay, minute));
+                }
+                else {
+                    program.setStartTime(LocalTime.of(hourOfDay, minute));
+                }
+            }
+        });
+
+        timePicker.setIs24HourView(true);
+
+
+        Button buttonSave = view.findViewById(R.id.save);
+        Button buttonCancel = view.findViewById(R.id.cancel);
+        Button buttonDelete = view.findViewById(R.id.delete);
+
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DayOfWeek selectedDay =  DayOfWeek.values()[numberPikerWeekDay.getValue()];
+                program.setWeekDay(selectedDay);
+                Thermostat thermostat = MainActivity.user.getSelectedThermostat();
+                Set<Program> programs = thermostat.getProgramMode().getPrograms();
+                if(!programs.contains(program)){
+                    programs.add(program);
+                    // program.setProgramMode(thermostat.getProgramMode());
+                }
+                HttpClient.putThermostat(thermostat, null, null);
+                dismiss();
+            }
+        });
+
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Thermostat thermostat = MainActivity.user.getSelectedThermostat();
+                Set<Program> programs = thermostat.getProgramMode().getPrograms();
+                if(programs.contains(program)){
+                    programs.remove(program);
+                    HttpClient.putThermostat(thermostat, null, null);
+                }
+
+                dismiss();
+            }
+        });
+
+
+
+        return view;
     }
 
 

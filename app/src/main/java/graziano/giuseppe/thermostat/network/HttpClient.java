@@ -22,9 +22,11 @@ import graziano.giuseppe.thermostat.MainActivity;
 import graziano.giuseppe.thermostat.R;
 import graziano.giuseppe.thermostat.adapter.LocalTimeJsonDeserializer;
 import graziano.giuseppe.thermostat.adapter.LocalTimeJsonSerializer;
+import graziano.giuseppe.thermostat.data.model.Program;
 import graziano.giuseppe.thermostat.data.model.Thermostat;
 import graziano.giuseppe.thermostat.network.request.BasicAuthRequest;
 import graziano.giuseppe.thermostat.network.request.MeasurementListRequest;
+import graziano.giuseppe.thermostat.network.request.ProgramRequest;
 import graziano.giuseppe.thermostat.network.request.SensorStatsRequest;
 import graziano.giuseppe.thermostat.network.request.ThermostatRequest;
 import graziano.giuseppe.thermostat.network.request.UserRequest;
@@ -43,6 +45,7 @@ public class HttpClient {
 
     private static String PLACEHOLDER_THERMOSTAT_ID = "${thermostat_id}";
     private static String PLACEHOLDER_SENSOR_ID = "${sensor_id}";
+    private static String PLACEHOLDER_PROGRAM_ID = "${program_id}";
     private static String PLACEHOLDER_DATE_FROM = "${date_from}";
     private static String PLACEHOLDER_DATE_TO = "${date_to}";
 
@@ -56,6 +59,10 @@ public class HttpClient {
     private static String ENDPOINT_PUT_USER_THERMOSTAT_SELECT = "/thermostat/user/thermostat/select?thermostat_id=${thermostat_id}";
     private static String ENDPOINT_GET_MEASUREMENTS_LAST = "/thermostat/measurements/last?thermostat_id=${thermostat_id}";
     private static String ENDPOINT_GET_MEASUREMENTS = "/thermostat/measurements?thermostat_id=${thermostat_id}&sensor_id=${sensor_id}";
+    private static String ENDPOINT_GET_PROGRAMS = "/thermostat/programs?thermostat_id=${thermostat_id}";
+    private static String ENDPOINT_PUT_PROGRAM = "/thermostat/program?thermostat_id=${thermostat_id}";
+    private static String ENDPOINT_POST_PROGRAM = "/thermostat/program?thermostat_id=${thermostat_id}";
+    private static String ENDPOINT_DELETE_PROGRAM = "/thermostat/program?thermostat_id=${thermostat_id}&program_id=${program_id}";
     private static String ENDPOINT_GET_SENSOR_STATS = "/thermostat/measurements/stats?thermostat_id=${thermostat_id}&sensor_id=${sensor_id}";
     private static String ENDPOINT_GET_SENSOR_STATS_FROM = ENDPOINT_GET_SENSOR_STATS + "&date_from=${date_from}";
     private static String ENDPOINT_GET_SENSOR_STATS_TO = ENDPOINT_GET_SENSOR_STATS + "&date_to=${date_to}";
@@ -126,6 +133,35 @@ public class HttpClient {
         url = url.replace(PLACEHOLDER_SENSOR_ID, String.valueOf(sensorId));
         MeasurementListRequest measurementListRequest = new MeasurementListRequest(Request.Method.GET, url, null, listener, errorListener ,MainActivity.user.getUsername(), MainActivity.user.getPassword());
         queue.add(measurementListRequest);
+    }
+
+   /* public static void getPrograms(Long id, Response.Listener<BasicAuthRequest> listener, Response.ErrorListener errorListener){
+        String url = URL_SERVER + ENDPOINT_GET_PROGRAMS;
+        url = url.replace(PLACEHOLDER_THERMOSTAT_ID, String.valueOf(id));
+        MeasurementListRequest measurementListRequest = new MeasurementListRequest(Request.Method.GET, url, null, listener, errorListener ,MainActivity.user.getUsername(), MainActivity.user.getPassword());
+        queue.add(measurementListRequest);
+    }*/
+
+    public static void postProgram(Long id, Program program, Response.Listener<BasicAuthRequest> listener, Response.ErrorListener errorListener){
+        String url = URL_SERVER + ENDPOINT_POST_PROGRAM;
+        url = url.replace(PLACEHOLDER_THERMOSTAT_ID, String.valueOf(id));
+        ProgramRequest login = new ProgramRequest(Request.Method.POST, url, gson.toJson(program), listener, errorListener ,MainActivity.user.getUsername(), MainActivity.user.getPassword());
+        queue.add(login);
+    }
+
+    public static void putProgram(Long id, Program program, Response.Listener<BasicAuthRequest> listener, Response.ErrorListener errorListener){
+        String url = URL_SERVER + ENDPOINT_POST_PROGRAM;
+        url = url.replace(PLACEHOLDER_THERMOSTAT_ID, String.valueOf(id));
+        ProgramRequest login = new ProgramRequest(Request.Method.PUT, url, gson.toJson(program), listener, errorListener ,MainActivity.user.getUsername(), MainActivity.user.getPassword());
+        queue.add(login);
+    }
+
+    public static void deleteProgram(Long id, Program program, Response.Listener<BasicAuthRequest> listener, Response.ErrorListener errorListener){
+        String url = URL_SERVER + ENDPOINT_DELETE_PROGRAM;
+        url = url.replace(PLACEHOLDER_THERMOSTAT_ID, String.valueOf(id));
+        url = url.replace(PLACEHOLDER_PROGRAM_ID, String.valueOf(program.getId()));
+        ProgramRequest login = new ProgramRequest(Request.Method.DELETE, url,null, listener, errorListener ,MainActivity.user.getUsername(), MainActivity.user.getPassword());
+        queue.add(login);
     }
 
     public static void getSensorStatsFrom(Long id, Long sensorId, Long dateTimestampFrom, Response.Listener<BasicAuthRequest> listener, Response.ErrorListener errorListener){

@@ -70,8 +70,8 @@
     </string-array>
 
 
-<!--     <string name="server_url">https://graziano-thermostat.herokuapp.com</string>-->
-    <string name="server_url">http://192.168.1.205:8091</string>
+     <string name="server_url">https://graziano-thermostat.herokuapp.com</string>
+    <!--<string name="server_url">http://192.168.1.205:8091</string>-->
 
     <string name="http_error_parse">Error parsing response</string>
     <string name="http_error_bad_response">Request error; [status_code: ${error}]</string>

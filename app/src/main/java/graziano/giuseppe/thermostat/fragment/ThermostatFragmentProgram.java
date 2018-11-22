@@ -37,6 +37,7 @@ public class ThermostatFragmentProgram extends Fragment{
     private BottomSheetDialogFragment programsBottomSheetDialog;
     private ProgramRecyclerViewAdapter programRecyclerViewAdapter;
     private Timer updateTimer;
+    List<Program> programs;
 
     public ThermostatFragmentProgram() {
         // Required empty public constructor
@@ -53,7 +54,7 @@ public class ThermostatFragmentProgram extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        programs = new ArrayList<>();
 
     }
 
@@ -127,7 +128,7 @@ public class ThermostatFragmentProgram extends Fragment{
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        List<Program> programs = new ArrayList<>(MainActivity.user.getSelectedThermostat().getProgramMode().getPrograms());
+//        programs = new ArrayList<>(MainActivity.user.getSelectedThermostat().getProgramMode().getPrograms());
 
         programRecyclerViewAdapter = new ProgramRecyclerViewAdapter(programs, getContext(), mListener);
 //        programRecyclerViewAdapter.notify();
@@ -158,6 +159,8 @@ public class ThermostatFragmentProgram extends Fragment{
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        programs.clear();
+                        programs.addAll(MainActivity.user.getSelectedThermostat().getProgramMode().getPrograms());
                         programRecyclerViewAdapter.notifyDataSetChanged();
                     }
                 });
