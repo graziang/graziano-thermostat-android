@@ -1,8 +1,10 @@
 package graziano.giuseppe.thermostat.fragment;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -27,7 +29,10 @@ import com.yarolegovich.discretescrollview.transform.ScaleTransformer;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -50,7 +55,7 @@ import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
 
 public class ThermostatFragmentProgram extends Fragment implements Response.Listener{
-    private final int timerPeriod = 3000;
+    private final int timerPeriod = 6000;
 
     private OnListFragmentInteractionListener mListener;
     private BottomSheetBehavior behavior;
@@ -180,12 +185,7 @@ public class ThermostatFragmentProgram extends Fragment implements Response.List
             InfiniteScrollAdapter wrapper = InfiniteScrollAdapter.wrap(thermostatSensorRecyclerViewAdapter);
             measurementsScrollView.setAdapter(wrapper);
             measurementsScrollView.setOverScrollEnabled(true);
-            measurementsScrollView.setItemTransformer(new ScaleTransformer.Builder()
-                    // .setMaxScale(1.05f)
-                    //.setMinScale(0.8f)
-                    .setPivotX(Pivot.X.CENTER) // CENTER is a default one
-                    .setPivotY(Pivot.Y.BOTTOM) // CENTER is a default one
-                    .build());
+
         }
 
         initializeView(view);
@@ -244,6 +244,34 @@ public class ThermostatFragmentProgram extends Fragment implements Response.List
                     public void run() {
                         programs.clear();
                         programs.addAll(MainActivity.user.getSelectedThermostat().getProgramMode().getPrograms());
+                        programs.sort(new Comparator<Program>() {
+                            @TargetApi(Build.VERSION_CODES.O)
+                            @Override
+                            public int compare(Program o1, Program o2) {
+                                int returnValue = 0;
+
+                                final List<DayOfWeek> days = Arrays.asList(DayOfWeek.values());
+
+                                if(days.indexOf(o1.getWeekDay()) < days.indexOf(o2.getWeekDay())){
+                                   return -1;
+                                }
+                                else if(days.indexOf(o1.getWeekDay()) > days.indexOf(o2.getWeekDay())){
+                                    return 1;
+                                }
+
+                                LocalTime startTime = LocalTime.of(o1.getStartTime().getHour(), o1.getStartTime().getMinute());
+
+                                LocalTime endTime = LocalTime.of(o2.getStartTime().getHour(), o2.getStartTime().getMinute());
+
+                                if(startTime.isBefore(endTime)){
+                                    return -1;
+                                }
+                                else {
+                                    return 1;
+                                }
+
+                            }
+                        });
                         programRecyclerViewAdapter.notifyDataSetChanged();
                     }
                 });

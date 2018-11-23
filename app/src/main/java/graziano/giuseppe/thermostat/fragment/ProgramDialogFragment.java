@@ -329,7 +329,7 @@ public class ProgramDialogFragment extends DialogFragment {
             }
         });
 
-        buttonDelete.setOnClickListener(new View.OnClickListener() {
+      /*  buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Thermostat thermostat = MainActivity.user.getSelectedThermostat();
@@ -341,7 +341,7 @@ public class ProgramDialogFragment extends DialogFragment {
 
                 dismiss();
             }
-        });
+        });*/
 
 
 
