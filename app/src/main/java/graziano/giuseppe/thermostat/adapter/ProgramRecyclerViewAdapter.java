@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.time.DayOfWeek;
+import java.util.Arrays;
 import java.util.List;
 
 import graziano.giuseppe.thermostat.R;
@@ -46,7 +48,10 @@ public class ProgramRecyclerViewAdapter extends RecyclerView.Adapter<ProgramRecy
 
         Program program = this.programs.get(position);
 
-        String text = programs.get(position).getWeekDay().toString() + " - " + program.getStartTime().toString() + " a " + program.getEndTime().toString();
+        final String days[] = context.getResources().getStringArray(R.array.week_days);
+
+
+        String text = days[Arrays.asList(DayOfWeek.values()).indexOf(program.getWeekDay())] + " da " + program.getStartTime().toString() + " a " + program.getEndTime().toString();
 
         holder.programNameTextView.setText(text);
 

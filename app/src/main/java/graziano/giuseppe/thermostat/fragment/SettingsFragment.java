@@ -32,6 +32,7 @@ import java.util.Set;
 import graziano.giuseppe.thermostat.LoginActivity;
 import graziano.giuseppe.thermostat.MainActivity;
 import graziano.giuseppe.thermostat.R;
+import graziano.giuseppe.thermostat.data.model.Source;
 import graziano.giuseppe.thermostat.data.model.Thermostat;
 import graziano.giuseppe.thermostat.data.model.User;
 import graziano.giuseppe.thermostat.network.HttpClient;
@@ -194,6 +195,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             ListPreference thermostatModeSelectPreference = (ListPreference) findPreference(PREFERENCE_KEY_THERMOSTAT_MODE_SELECTED);
             selectedThermostat.setMode(thermostatModeSelectPreference.getValue());
             thermostatModeSelectPreference.setSummary(thermostatModeSelectPreference.getEntry());
+
             HttpClient.putThermostat(selectedThermostat, this, this);
 
         }

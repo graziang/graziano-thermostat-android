@@ -74,16 +74,18 @@ public class ThermostatSensorRecyclerViewAdapter extends RecyclerView.Adapter<Th
         Thermostat thermostat = MainActivity.user.getSelectedThermostat();
 
         if(thermostat != null) {
-            Long sensorId = thermostat.getManualMode().getSensorId();
-            if (thermostat.getManualMode().isAvg() && measurement.isAvg()){
-                sensorMeasurementLastTextView.setTypeface(null, Typeface.BOLD);
-              //  sensorNameTextView.setTypeface(null, Typeface.BOLD);
-                color = this.context.getResources().getColor(R.color.colorPrimary);
-            }
-            if (!thermostat.getManualMode().isAvg() && measurement.getSensor() != null && measurement.getSensor().getId() == sensorId) {
-                sensorMeasurementLastTextView.setTypeface(null, Typeface.BOLD);
-               // sensorNameTextView.setTypeface(null, Typeface.BOLD);
-                color = this.context.getResources().getColor(R.color.colorPrimary);
+            if (thermostat.getMode().equals(Thermostat.MANUAL_MODE)) {
+                Long sensorId = thermostat.getManualMode().getSensorId();
+                if (thermostat.getManualMode().isAvg() && measurement.isAvg()) {
+                    sensorMeasurementLastTextView.setTypeface(null, Typeface.BOLD);
+                    //  sensorNameTextView.setTypeface(null, Typeface.BOLD);
+                    color = this.context.getResources().getColor(R.color.colorPrimary);
+                }
+                if (!thermostat.getManualMode().isAvg() && measurement.getSensor() != null && measurement.getSensor().getId() == sensorId) {
+                    sensorMeasurementLastTextView.setTypeface(null, Typeface.BOLD);
+                    // sensorNameTextView.setTypeface(null, Typeface.BOLD);
+                    color = this.context.getResources().getColor(R.color.colorPrimary);
+                }
             }
         }
 

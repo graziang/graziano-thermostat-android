@@ -32,6 +32,8 @@ public class Thermostat {
 
     private Set<Sensor> sensors = new HashSet<>();
 
+    private Source source;
+
 
     public Thermostat() {
     }
@@ -128,6 +130,15 @@ public class Thermostat {
 
     public void setProgramMode(ProgramMode programMode) {
         this.programMode = programMode;
+    }
+
+
+    public Source getSource() {
+        return source;
+    }
+
+    public void setSource(Source source) {
+        this.source = source;
     }
 
     @Override

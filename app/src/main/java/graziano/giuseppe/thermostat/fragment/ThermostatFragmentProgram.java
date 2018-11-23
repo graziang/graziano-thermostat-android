@@ -1,6 +1,8 @@
 package graziano.giuseppe.thermostat.fragment;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -15,21 +17,39 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.yarolegovich.discretescrollview.DiscreteScrollView;
+import com.yarolegovich.discretescrollview.InfiniteScrollAdapter;
+import com.yarolegovich.discretescrollview.transform.Pivot;
+import com.yarolegovich.discretescrollview.transform.ScaleTransformer;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import graziano.giuseppe.thermostat.DataUtils;
 import graziano.giuseppe.thermostat.MainActivity;
 import graziano.giuseppe.thermostat.R;
 import graziano.giuseppe.thermostat.adapter.ProgramRecyclerViewAdapter;
+import graziano.giuseppe.thermostat.adapter.ThermostatSensorRecyclerViewAdapter;
+import graziano.giuseppe.thermostat.data.model.Measurement;
 import graziano.giuseppe.thermostat.data.model.Program;
 import graziano.giuseppe.thermostat.data.model.Sensor;
 import graziano.giuseppe.thermostat.data.model.Thermostat;
+import graziano.giuseppe.thermostat.network.HttpClient;
+import io.feeeei.circleseekbar.CircleSeekBar;
+import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
 
-public class ThermostatFragmentProgram extends Fragment{
+public class ThermostatFragmentProgram extends Fragment implements Response.Listener{
     private final int timerPeriod = 3000;
 
     private OnListFragmentInteractionListener mListener;
@@ -38,6 +58,9 @@ public class ThermostatFragmentProgram extends Fragment{
     private ProgramRecyclerViewAdapter programRecyclerViewAdapter;
     private Timer updateTimer;
     List<Program> programs;
+    private List<Measurement> measurementsLast;
+    DiscreteScrollView measurementsScrollView;
+    private ThermostatSensorRecyclerViewAdapter thermostatSensorRecyclerViewAdapter;
 
     public ThermostatFragmentProgram() {
         // Required empty public constructor
@@ -55,7 +78,7 @@ public class ThermostatFragmentProgram extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         programs = new ArrayList<>();
-
+        this.measurementsLast = new ArrayList<>();
     }
 
     @Override
@@ -146,8 +169,66 @@ public class ThermostatFragmentProgram extends Fragment{
             }
         });
 
+        TextView thermostatTemperatureTextView = view.findViewById(R.id.thermostatTemperatureTextView);
+        TextView thermostatNameTextView = view.findViewById(R.id.thermostatNameTextView);
+        //TextView thermostatLastMeasurementDateTextView = view.findViewById(R.id.thermostatLastMeasurementDateTextView);
+        // thermostatLastMeasurementDateTextView.setText(R.string.measurement_miss);
+        if(measurementsScrollView == null) {
+
+            this.thermostatSensorRecyclerViewAdapter = new ThermostatSensorRecyclerViewAdapter(measurementsLast, getContext());
+            measurementsScrollView = view.findViewById(R.id.sensors_measurements_scrollview);
+            InfiniteScrollAdapter wrapper = InfiniteScrollAdapter.wrap(thermostatSensorRecyclerViewAdapter);
+            measurementsScrollView.setAdapter(wrapper);
+            measurementsScrollView.setOverScrollEnabled(true);
+            measurementsScrollView.setItemTransformer(new ScaleTransformer.Builder()
+                    // .setMaxScale(1.05f)
+                    //.setMinScale(0.8f)
+                    .setPivotX(Pivot.X.CENTER) // CENTER is a default one
+                    .setPivotY(Pivot.Y.BOTTOM) // CENTER is a default one
+                    .build());
+        }
+
+        initializeView(view);
+
         return  view;
     }
+
+    public void initializeView(View view) {
+
+
+
+        PulsatorLayout pulsatorLayout = view.findViewById(R.id.pulsator);
+        View button = pulsatorLayout.findViewById(R.id.status);
+        Drawable background = button.getBackground();
+
+
+        Thermostat thermostat = MainActivity.user.getSelectedThermostat();
+
+        if(thermostat != null) {
+
+          //  ((GradientDrawable) background).setColor(getContext().getResources().getColor(R.color.colorBackground));
+            if (!thermostat.isStateOn()) {
+                button.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                //  pulsatorLayout.setColor(getResources().getColor(R.color.colorNotActive));
+                if (pulsatorLayout.isStarted()) {
+                    pulsatorLayout.setAlpha(0);
+                }
+            } else {
+                button.setBackgroundColor(getResources().getColor(R.color.colorActive));
+                pulsatorLayout.setAlpha(1);
+                if (!pulsatorLayout.isStarted()) {
+                    pulsatorLayout.setColor(getResources().getColor(R.color.colorActive));
+                    pulsatorLayout.start();
+                }
+
+
+            }
+        }
+
+
+
+    }
+
 
 
     public void updateThermostat() {
@@ -156,6 +237,8 @@ public class ThermostatFragmentProgram extends Fragment{
         if (thermostat != null) {
 
             if (thermostat.isActive()) {
+                HttpClient.getMeasurementsLast(thermostat.getId(), this, null);
+                HttpClient.getThermostat(thermostat.getId(), this, null);
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -166,6 +249,53 @@ public class ThermostatFragmentProgram extends Fragment{
                 });
 
             }
+        }
+    }
+
+    @Override
+    public void onResponse(Object response) {
+
+        if(response instanceof Thermostat){
+            Thermostat thermostat = (Thermostat) response;
+            MainActivity.user.getSelectedThermostat().setStateOn(thermostat.isStateOn());
+            // getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+
+            if(getActivity() != null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        initializeView(getView());
+
+                    }
+                });
+            }
+
+        }
+        if(response instanceof List){
+            List<Measurement> measurements = (List<Measurement>) response;
+
+            measurements = new ArrayList<>(measurements);
+            Collections.sort(measurements, new Comparator<Measurement>() {
+                @Override
+                public int compare(Measurement o1, Measurement o2) {
+                    return o1.getSensor().getName().compareTo(o2.getSensor().getName());
+                }
+            });
+            float avg = 0;
+            for (Measurement measurement: measurements){
+                avg += measurement.getTemperature();
+            }
+            avg = avg / measurements.size();
+            Measurement measurementAgv = new Measurement();
+            measurementAgv.setTemperature(avg);
+            measurementAgv.setAvg(true);
+            measurements.add(0, measurementAgv);
+
+            this.measurementsLast.clear();
+            this.measurementsLast.addAll(measurements);
+            thermostatSensorRecyclerViewAdapter.notifyDataSetChanged();
+
         }
     }
 

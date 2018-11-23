@@ -55,6 +55,7 @@ public class HttpClient {
 
     private static String ENDPOINT_TEST_LOGIN = "/thermostat/test/login";
     private static String ENDPOINT_GET_USER = "/thermostat/user";
+    private static String ENDPOINT_GET_THERMOSTAT = "/thermostat/thermostat?thermostat_id=${thermostat_id}";
     private static String ENDPOINT_PUT_THERMOSTAT = "/thermostat/thermostat?thermostat_id=${thermostat_id}";
     private static String ENDPOINT_PUT_USER_THERMOSTAT_SELECT = "/thermostat/user/thermostat/select?thermostat_id=${thermostat_id}";
     private static String ENDPOINT_GET_MEASUREMENTS_LAST = "/thermostat/measurements/last?thermostat_id=${thermostat_id}";
@@ -133,6 +134,13 @@ public class HttpClient {
         url = url.replace(PLACEHOLDER_SENSOR_ID, String.valueOf(sensorId));
         MeasurementListRequest measurementListRequest = new MeasurementListRequest(Request.Method.GET, url, null, listener, errorListener ,MainActivity.user.getUsername(), MainActivity.user.getPassword());
         queue.add(measurementListRequest);
+    }
+
+    public static void getThermostat(Long id, Response.Listener<BasicAuthRequest> listener, Response.ErrorListener errorListener){
+        String url = URL_SERVER + ENDPOINT_GET_THERMOSTAT;
+        url = url.replace(PLACEHOLDER_THERMOSTAT_ID, String.valueOf(id));
+        ThermostatRequest thermostatRequest = new ThermostatRequest(Request.Method.GET, url, null, listener, errorListener ,MainActivity.user.getUsername(), MainActivity.user.getPassword());
+        queue.add(thermostatRequest);
     }
 
    /* public static void getPrograms(Long id, Response.Listener<BasicAuthRequest> listener, Response.ErrorListener errorListener){

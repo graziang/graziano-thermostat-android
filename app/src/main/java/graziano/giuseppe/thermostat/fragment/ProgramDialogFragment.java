@@ -249,7 +249,7 @@ public class ProgramDialogFragment extends DialogFragment {
 
             }
         };
-        numberPikerWeekDay.setValue(Arrays.asList(days).indexOf(program.getWeekDay()));
+        numberPikerWeekDay.setValue(Arrays.asList(DayOfWeek.values()).indexOf(program.getWeekDay()));
 
 
         numberPikerWeekDay.setOnValueChangedListener(myValChangedListener);
@@ -310,6 +310,7 @@ public class ProgramDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 DayOfWeek selectedDay =  DayOfWeek.values()[numberPikerWeekDay.getValue()];
                 program.setWeekDay(selectedDay);
+                program.setActive(true);
                 Thermostat thermostat = MainActivity.user.getSelectedThermostat();
                 Set<Program> programs = thermostat.getProgramMode().getPrograms();
                 if(!programs.contains(program)){

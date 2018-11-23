@@ -9,32 +9,66 @@
     android:background="#a3b1ef"
     android:fitsSystemWindows="true">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/proggg"
-    android:background="@color/colorBackground"
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
-
-
-    <TextView
-        android:id="@+id/thermostatNameTextView"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:background="@color/colorBackground"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/colorTextPrimary"
-        android:textSize="25sp"
-        android:gravity="center"
-        android:text="PROGRAMMMM!!!!"
-        android:layout_alignParentTop="true"/>
+        android:orientation="vertical"
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/addProgram"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Aggiungi programma"/>
+
+        <TextView
+            android:id="@+id/thermostatNameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="25sp"
+            android:gravity="center"
+            android:layout_alignParentTop="true"/>
+
+
+
+
+        <Button
+            android:id="@+id/addProgram"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Aggiungi programma"/>
+
+        <com.yarolegovich.discretescrollview.DiscreteScrollView
+            android:id="@+id/sensors_measurements_scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            app:dsv_orientation="horizontal"
+            android:layout_below="@id/addProgram"/>
+
+        <pl.bclogic.pulsator4droid.library.PulsatorLayout
+            android:id="@+id/pulsator"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            app:pulse_count="4"
+            app:pulse_duration="3500"
+            app:pulse_repeat="0"
+            app:pulse_color="@color/colorActive"
+            app:pulse_startFromScratch="false"
+            app:pulse_interpolator="Decelerate">
+
+            <Button
+                android:id="@+id/status"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="30dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/round_item"/>
+
+
+
+        </pl.bclogic.pulsator4droid.library.PulsatorLayout>
 </RelativeLayout>
 
 
@@ -42,7 +76,7 @@
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:background="#fff"
+        android:background="@color/colorPrimary"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_behavior="@string/bottom_sheet_behavior"
