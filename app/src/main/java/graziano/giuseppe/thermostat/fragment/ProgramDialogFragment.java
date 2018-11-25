@@ -27,6 +27,7 @@ import android.widget.ToggleButton;
 
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Method;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -267,6 +268,18 @@ public class ProgramDialogFragment extends DialogFragment {
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                Method m = null;
+                try {
+                    m = TimePicker.class.getDeclaredMethod("getHourView");
+
+                m.setAccessible(true);
+                View view = (View) m.invoke(timePicker);
+                view.performClick();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 if(isChecked){
                     program.setStartTime(LocalTime.of(timePicker.getHour(), timePicker.getMinute()));
                     timePicker.setHour(program.getEndTime().getHour());
