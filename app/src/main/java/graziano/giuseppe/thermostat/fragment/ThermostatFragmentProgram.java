@@ -192,8 +192,8 @@ public class ThermostatFragmentProgram extends Fragment implements Response.List
 
             this.thermostatSensorRecyclerViewAdapter = new ThermostatSensorRecyclerViewAdapter(measurementsLast, getContext());
             measurementsScrollView = view.findViewById(R.id.sensors_measurements_scrollview);
-            InfiniteScrollAdapter wrapper = InfiniteScrollAdapter.wrap(thermostatSensorRecyclerViewAdapter);
-            measurementsScrollView.setAdapter(wrapper);
+          //  InfiniteScrollAdapter wrapper = InfiniteScrollAdapter.wrap(thermostatSensorRecyclerViewAdapter);
+            measurementsScrollView.setAdapter(thermostatSensorRecyclerViewAdapter);
             measurementsScrollView.setOverScrollEnabled(true);
             measurementsScrollView.setItemTransformer(new ScaleTransformer.Builder()
                     // .setMaxScale(1.05f)
@@ -404,7 +404,9 @@ public class ThermostatFragmentProgram extends Fragment implements Response.List
 
             this.measurementsLast.clear();
             this.measurementsLast.addAll(measurements);
-            thermostatSensorRecyclerViewAdapter.notifyDataSetChanged();
+            if(thermostatSensorRecyclerViewAdapter != null) {
+                thermostatSensorRecyclerViewAdapter.notifyDataSetChanged();
+            }
 
         }
     }

@@ -77,7 +77,7 @@ public class ProgramDialogFragment extends DialogFragment {
             LocalTime now = LocalTime.of(LocalTime.now().getHour(), LocalTime.now().getMinute());
             program = (Program) getArguments().getSerializable(ARG_PROGRAM);
             if(program.getId() == 0L){
-                program.setWeekDay(LocalDate.now().getDayOfWeek());
+               // program.setWeekDay(LocalDate.now().getDayOfWeek());
                 program.setStartTime(now);
                 program.setEndTime(now);
             }
