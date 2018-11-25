@@ -267,7 +267,6 @@ public class ProgramDialogFragment extends DialogFragment {
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                timePicker.sele
                 if(isChecked){
                     program.setStartTime(LocalTime.of(timePicker.getHour(), timePicker.getMinute()));
                     timePicker.setHour(program.getEndTime().getHour());
@@ -347,7 +346,7 @@ public class ProgramDialogFragment extends DialogFragment {
             }
         });
 
-        buttonDelete.setOnClickListener(new View.OnClickListener() {
+      /*  buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Thermostat thermostat = MainActivity.user.getSelectedThermostat();
@@ -355,7 +354,7 @@ public class ProgramDialogFragment extends DialogFragment {
 
                 dismiss();
             }
-        });
+        });*/
 
 
 
