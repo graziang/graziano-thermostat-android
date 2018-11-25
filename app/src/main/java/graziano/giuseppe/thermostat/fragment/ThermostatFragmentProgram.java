@@ -1,8 +1,10 @@
 package graziano.giuseppe.thermostat.fragment;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -27,7 +29,9 @@ import com.yarolegovich.discretescrollview.transform.ScaleTransformer;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.DayOfWeek;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -225,6 +229,34 @@ public class ThermostatFragmentProgram extends Fragment implements Response.List
             }
         }
 
+        programs.clear();
+        programs.addAll(MainActivity.user.getSelectedThermostat().getProgramMode().getPrograms());
+        programs.sort(new Comparator<Program>() {
+            @TargetApi(Build.VERSION_CODES.O)
+            @Override
+            public int compare(Program o1, Program o2) {
+                int day1index = Arrays.asList(DayOfWeek.values()).indexOf(o1.getWeekDay());
+                int day2Index = Arrays.asList(DayOfWeek.values()).indexOf(o2.getWeekDay());
+                if(day1index < day2Index){
+                    return -1;
+                }
+                if(day1index > day2Index){
+                    return 1;
+                }
+
+                if (o1.getStartTime().isBefore(o2.getStartTime())){
+                    return -1;
+                }
+                else{
+                    return 1;
+                }
+
+            }
+        });
+
+        programRecyclerViewAdapter.notifyDataSetChanged();
+
+
 
 
     }
@@ -239,15 +271,6 @@ public class ThermostatFragmentProgram extends Fragment implements Response.List
             if (thermostat.isActive()) {
                 HttpClient.getMeasurementsLast(thermostat.getId(), this, null);
                 HttpClient.getThermostat(thermostat.getId(), this, null);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        programs.clear();
-                        programs.addAll(MainActivity.user.getSelectedThermostat().getProgramMode().getPrograms());
-                        programRecyclerViewAdapter.notifyDataSetChanged();
-                    }
-                });
-
             }
         }
     }
@@ -258,6 +281,7 @@ public class ThermostatFragmentProgram extends Fragment implements Response.List
         if(response instanceof Thermostat){
             Thermostat thermostat = (Thermostat) response;
             MainActivity.user.getSelectedThermostat().setStateOn(thermostat.isStateOn());
+            MainActivity.user.getSelectedThermostat().setProgramMode(thermostat.getProgramMode());
             // getFragmentManager().beginTransaction().detach(this).attach(this).commit();
 
             if(getActivity() != null) {
@@ -266,6 +290,7 @@ public class ThermostatFragmentProgram extends Fragment implements Response.List
                     public void run() {
 
                         initializeView(getView());
+
 
                     }
                 });

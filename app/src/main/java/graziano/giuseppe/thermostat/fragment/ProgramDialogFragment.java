@@ -71,17 +71,18 @@ public class ProgramDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            LocalTime now = LocalTime.of(LocalTime.now().getHour(), LocalTime.now().getMinute());
             program = (Program) getArguments().getSerializable(ARG_PROGRAM);
             if(program.getId() == 0L){
                 program.setWeekDay(LocalDate.now().getDayOfWeek());
-                program.setStartTime(LocalTime.now());
-                program.setEndTime(LocalTime.now());
+                program.setStartTime(now);
+                program.setEndTime(now);
             }
             if(program.getStartTime() == null){
-                program.setStartTime(LocalTime.now());
+                program.setStartTime(now);
             }
             if(program.getEndTime() == null){
-                program.setEndTime(LocalTime.now());
+                program.setEndTime(now);
             }
         }
     }
@@ -266,14 +267,15 @@ public class ProgramDialogFragment extends DialogFragment {
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                statusChange = true;
+                timePicker.sele
                 if(isChecked){
-
+                    program.setStartTime(LocalTime.of(timePicker.getHour(), timePicker.getMinute()));
                     timePicker.setHour(program.getEndTime().getHour());
                     timePicker.setMinute(program.getEndTime().getMinute());
 
                 }
                 else {
+                    program.setEndTime(LocalTime.of(timePicker.getHour(), timePicker.getMinute()));
                     timePicker.setHour(program.getStartTime().getHour());
                     timePicker.setMinute(program.getStartTime().getMinute());
 
@@ -282,7 +284,7 @@ public class ProgramDialogFragment extends DialogFragment {
         });
 
 
-        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+   /*     timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                 if(statusChange){
@@ -296,7 +298,7 @@ public class ProgramDialogFragment extends DialogFragment {
                     program.setStartTime(LocalTime.of(hourOfDay, minute));
                 }
             }
-        });
+        });*/
 
         timePicker.setIs24HourView(true);
 
@@ -310,15 +312,31 @@ public class ProgramDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 DayOfWeek selectedDay =  DayOfWeek.values()[numberPikerWeekDay.getValue()];
                 program.setWeekDay(selectedDay);
+
+                if(toggleButton.isChecked()){
+                    program.setEndTime(LocalTime.of(timePicker.getHour(), timePicker.getMinute()));
+                }
+                else {
+                    program.setStartTime(LocalTime.of(timePicker.getHour(), timePicker.getMinute()));
+                }
+
                 program.setActive(true);
                 Thermostat thermostat = MainActivity.user.getSelectedThermostat();
                 Set<Program> programs = thermostat.getProgramMode().getPrograms();
-                if(!programs.contains(program)){
-                    programs.add(program);
-                    // program.setProgramMode(thermostat.getProgramMode());
+
+                for (Program p: programs) {
+                    if (p.getId() > 0 && p.getId() == program.getId()) {
+                        HttpClient.putProgram(thermostat.getId(), program, null, null);
+                        // program.setProgramMode(thermostat.getProgramMode());
+                        dismiss();
+                        return;
+                    }
                 }
-                HttpClient.putThermostat(thermostat, null, null);
+
+                HttpClient.postProgram(thermostat.getId(), program, null, null);
                 dismiss();
+
+
             }
         });
 
@@ -333,11 +351,7 @@ public class ProgramDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 Thermostat thermostat = MainActivity.user.getSelectedThermostat();
-                Set<Program> programs = thermostat.getProgramMode().getPrograms();
-                if(programs.contains(program)){
-                    programs.remove(program);
-                    HttpClient.putThermostat(thermostat, null, null);
-                }
+                HttpClient.deleteProgram(thermostat.getId(), program, null, null);
 
                 dismiss();
             }
