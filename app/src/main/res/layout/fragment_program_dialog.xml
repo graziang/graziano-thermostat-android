@@ -15,24 +15,30 @@
     android:id="@+id/form"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical">
 
 
 
-    <NumberPicker
+<!--    <NumberPicker
         android:id="@+id/weekDayPiker"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_margin="14dp"/>
+        android:layout_margin="14dp"/>-->
 
     <ToggleButton
         android:id="@+id/toggleButton"
+        android:gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textOn="@string/time_end"
         android:textOff="@string/time_start"
         android:text="ToggleButton"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:textColor="@color/colorPrimary"
+        android:background="@color/colorBackground"
         android:layout_margin="10dp"/>
 
 
@@ -41,6 +47,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"/>
+
+    <Switch
+        android:text="Attiva:"
+        android:gravity="center"
+        android:id="@+id/switchEnable"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:showText="false"
+        />
 
 </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
@@ -52,6 +67,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:background="@android:color/transparent"
+        android:textColor="@color/colorPrimary"
         android:text="Salva"
         />
 
@@ -61,6 +78,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
+        android:textColor="@color/colorActive"
         android:text="Annulla"
         />
 
@@ -70,6 +89,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"
+        android:textColor="@color/colorAccent"
         android:text="Elimina"
         />
 

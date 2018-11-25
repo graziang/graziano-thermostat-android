@@ -18,53 +18,57 @@
         android:layout_height="match_parent">
 
 
+        <devs.mulham.horizontalcalendar.HorizontalCalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            app:textColorSelected="#FFFF"/>
+
+
         <TextView
             android:id="@+id/thermostatNameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:textColor="@color/colorTextPrimary"
-            android:textSize="25sp"
+            android:textSize="22sp"
             android:gravity="center"
-            android:layout_alignParentTop="true"/>
+            android:layout_below="@id/calendarView"/>
 
 
 
-
-        <Button
-            android:id="@+id/addProgram"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="Aggiungi programma"/>
 
         <com.yarolegovich.discretescrollview.DiscreteScrollView
             android:id="@+id/sensors_measurements_scrollview"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="100dp"
             app:dsv_orientation="horizontal"
-            android:layout_below="@id/addProgram"/>
+            android:layout_below="@id/thermostatNameTextView"/>
+
+        <TextView
+            android:id="@+id/textViewStato"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="22sp"
+            android:gravity="center"
+            android:layout_below="@id/sensors_measurements_scrollview"/>
+
 
         <pl.bclogic.pulsator4droid.library.PulsatorLayout
             android:id="@+id/pulsator"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:gravity="center"
             app:pulse_count="4"
             app:pulse_duration="3500"
             app:pulse_repeat="0"
             app:pulse_color="@color/colorActive"
             app:pulse_startFromScratch="false"
+            android:layout_centerVertical="true"
             app:pulse_interpolator="Decelerate">
-
-            <Button
-                android:id="@+id/status"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="30dp"
-                android:layout_centerInParent="true"
-                android:background="@drawable/round_item"/>
 
 
 
@@ -72,15 +76,48 @@
 </RelativeLayout>
 
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:background="@color/colorPrimary"
-        android:gravity="center"
         android:orientation="vertical"
         app:layout_behavior="@string/bottom_sheet_behavior"
-        app:behavior_peekHeight="110dp">
+        app:behavior_peekHeight="150dp">
+
+
+
+        <Button
+            android:id="@+id/addProgram"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/white"
+            android:drawableLeft="@drawable/ic_add_button"
+            android:background="@android:color/transparent" />
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:textColor="@android:color/white"
+            android:textSize="20dp"
+            android:text="ACCENSIONE"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:textColor="@android:color/white"
+            android:textSize="20dp"
+            android:text="SPEGNIMENTO"/>
+
 
 
         <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -89,12 +126,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="true"
+            android:layout_marginTop="40dp"
             android:layout_marginBottom="60dp"
             android:paddingTop="@dimen/list_item_spacing_half"
             tools:context=".fragment.ProgramListDialogFragment"
             tools:listitem="@layout/fragment_program_list_dialog_item" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,9 +59,19 @@ public class ProgramRecyclerViewAdapter extends RecyclerView.Adapter<ProgramRecy
         final String days[] = context.getResources().getStringArray(R.array.week_days);
 
 
-        String text = days[Arrays.asList(DayOfWeek.values()).indexOf(program.getWeekDay())] + " da " + program.getStartTime().toString() + " a " + program.getEndTime().toString();
+        String timeFrom = program.getStartTime().toString();
+        String timeTo = program.getEndTime().toString();
 
-        holder.programNameTextView.setText(text);
+        holder.timeFromTextView.setText(timeFrom);
+        holder.timeToTextView.setText(timeTo);
+        holder.activeSwitch.setChecked(program.isActive());
+        holder.activeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                program.setActive(isChecked);
+                HttpClient.putProgram(MainActivity.user.getSelectedThermostatId(), program, null, null);
+            }
+        });
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,18 +98,23 @@ public class ProgramRecyclerViewAdapter extends RecyclerView.Adapter<ProgramRecy
 
     public class ProgramViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView programNameTextView;
+        public TextView timeFromTextView;
+        public TextView timeToTextView;
+        private Switch activeSwitch;
 
 
         public ProgramViewHolder(View view) {
             super(view);
 
-            programNameTextView = view.findViewById(R.id.program_name);
+            timeFromTextView = view.findViewById(R.id.timeFromTextView);
+            timeToTextView = view.findViewById(R.id.timeToTextView);
+            activeSwitch = view.findViewById(R.id.activeSwitch);
         }
     }
 
 
     private void showConfirmDialog(Program program){
+
         AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
         builder1.setMessage("Eliminare programma?");
         builder1.setCancelable(true);

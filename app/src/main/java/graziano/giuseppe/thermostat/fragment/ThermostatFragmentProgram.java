@@ -30,15 +30,21 @@ import com.yarolegovich.discretescrollview.transform.ScaleTransformer;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.function.Predicate;
 
+import devs.mulham.horizontalcalendar.HorizontalCalendar;
+import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 import graziano.giuseppe.thermostat.DataUtils;
 import graziano.giuseppe.thermostat.MainActivity;
 import graziano.giuseppe.thermostat.R;
@@ -65,6 +71,7 @@ public class ThermostatFragmentProgram extends Fragment implements Response.List
     private List<Measurement> measurementsLast;
     DiscreteScrollView measurementsScrollView;
     private ThermostatSensorRecyclerViewAdapter thermostatSensorRecyclerViewAdapter;
+    private DayOfWeek currentWeekDay = DayOfWeek.MONDAY;
 
     public ThermostatFragmentProgram() {
         // Required empty public constructor
@@ -130,6 +137,7 @@ public class ThermostatFragmentProgram extends Fragment implements Response.List
     }
 
 
+    @TargetApi(Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -168,13 +176,16 @@ public class ThermostatFragmentProgram extends Fragment implements Response.List
             @Override
             public void onClick(View v) {
                 FragmentManager fm = getActivity().getSupportFragmentManager();
-                ProgramDialogFragment editNameDialogFragment = ProgramDialogFragment.newInstance(new Program());
-                editNameDialogFragment.show(fm, "fragment_edit_name");
+                Program program = new Program();
+                program.setWeekDay(currentWeekDay);
+                ProgramDialogFragment programDialogFragment = ProgramDialogFragment.newInstance(program);
+                programDialogFragment.show(fm, "fragment_edit_name");
             }
         });
 
         TextView thermostatTemperatureTextView = view.findViewById(R.id.thermostatTemperatureTextView);
         TextView thermostatNameTextView = view.findViewById(R.id.thermostatNameTextView);
+
         //TextView thermostatLastMeasurementDateTextView = view.findViewById(R.id.thermostatLastMeasurementDateTextView);
         // thermostatLastMeasurementDateTextView.setText(R.string.measurement_miss);
         if(measurementsScrollView == null) {
@@ -192,6 +203,33 @@ public class ThermostatFragmentProgram extends Fragment implements Response.List
                     .build());
         }
 
+        /* starts before 1 month from now */
+        Calendar startDate = Calendar.getInstance();
+        startDate.add(Calendar.DAY_OF_YEAR, -7);
+
+        /* ends after 1 month from now */
+        Calendar endDate = Calendar.getInstance();
+        endDate.add(Calendar.DAY_OF_YEAR, 7);
+
+        HorizontalCalendar horizontalCalendar = new HorizontalCalendar.Builder(view, R.id.calendarView)
+                .range(startDate, endDate)
+                .datesNumberOnScreen(5)
+                .build();
+        currentWeekDay = LocalDate.now().getDayOfWeek();
+
+        horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
+            @Override
+            public void onDateSelected(Calendar date, int position) {
+
+
+                LocalDate calendarAsLocalDate = date.toInstant()
+                        .atZone(date.getTimeZone().toZoneId())
+                        .toLocalDate();
+
+                currentWeekDay = calendarAsLocalDate.getDayOfWeek();
+            }
+        });
+
         initializeView(view);
 
         return  view;
@@ -202,23 +240,65 @@ public class ThermostatFragmentProgram extends Fragment implements Response.List
 
 
         PulsatorLayout pulsatorLayout = view.findViewById(R.id.pulsator);
-        View button = pulsatorLayout.findViewById(R.id.status);
-        Drawable background = button.getBackground();
 
 
         Thermostat thermostat = MainActivity.user.getSelectedThermostat();
 
         if(thermostat != null) {
 
+            TextView thermostatNameTextView = (TextView)  view.findViewById(R.id.thermostatNameTextView);
+            thermostatNameTextView.setText(thermostat.getName());
+
+            TextView textViewStato = (TextView)  view.findViewById(R.id.textViewStato);
+
+            String stato = "";
+
+            if(thermostat.isStateOn()){
+                textViewStato.setTextColor(getResources().getColor(R.color.colorActive));
+                for (Program program: programs){
+                    if(program.isSourceOn()){
+                        stato = "RISCALDAMENTO ACCESO.\n Sì spegnerà alle " + program.getEndTime().toString();
+                    }
+                }
+            }
+            else {
+                textViewStato.setTextColor(getResources().getColor(R.color.colorNotActive));
+                LocalTime start = null;
+                LocalTime now = LocalTime.now();
+                LocalDate date = LocalDate.now();
+                for (Program program: thermostat.getProgramMode().getPrograms()){
+                    if(program.isActive() && date.getDayOfWeek().equals(program.getWeekDay())){
+                        if(program.getStartTime().isAfter(now)){
+                            if(start == null){
+                                start = program.getStartTime();
+                            }
+                            else {
+                                if(program.getStartTime().isBefore(start)){
+                                    start = program.getStartTime();
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if(start != null) {
+                    stato = "RISCALDAMENTO SPENTO.\n Sì accenderà alle " + start.toString();
+                }
+                else {
+                    stato = "RISCALDAMENTO SPENTO";
+                }
+
+            }
+
+            textViewStato.setText(stato);
+
           //  ((GradientDrawable) background).setColor(getContext().getResources().getColor(R.color.colorBackground));
             if (!thermostat.isStateOn()) {
-                button.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 //  pulsatorLayout.setColor(getResources().getColor(R.color.colorNotActive));
                 if (pulsatorLayout.isStarted()) {
                     pulsatorLayout.setAlpha(0);
                 }
             } else {
-                button.setBackgroundColor(getResources().getColor(R.color.colorActive));
                 pulsatorLayout.setAlpha(1);
                 if (!pulsatorLayout.isStarted()) {
                     pulsatorLayout.setColor(getResources().getColor(R.color.colorActive));
@@ -253,6 +333,11 @@ public class ThermostatFragmentProgram extends Fragment implements Response.List
 
             }
         });
+
+
+        //filtra per data
+        programs.removeIf(p-> !p.getWeekDay().equals(currentWeekDay));
+
 
         programRecyclerViewAdapter.notifyDataSetChanged();
 

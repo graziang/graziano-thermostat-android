@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -51,6 +52,7 @@ public class ProgramDialogFragment extends DialogFragment {
     private NumberPicker numberPikerWeekDay;
     private ToggleButton toggleButton;
     private TimePicker timePicker;
+    private Switch switchEnable;
     boolean statusChange = false;
 
    // private OnFragmentInteractionListener mListener;
@@ -232,14 +234,15 @@ public class ProgramDialogFragment extends DialogFragment {
 
         View view = inflater.inflate(R.layout.fragment_program_dialog, null);
 
-        numberPikerWeekDay = (NumberPicker) view.findViewById(R.id.weekDayPiker);
+        //numberPikerWeekDay = (NumberPicker) view.findViewById(R.id.weekDayPiker);
         timePicker = (TimePicker) view.findViewById(R.id.timePiker);
         toggleButton = (ToggleButton) view.findViewById(R.id.toggleButton);
+        switchEnable = (Switch) view.findViewById(R.id.switchEnable);
 
         final String days[] = getResources().getStringArray(R.array.week_days);
 
 
-        numberPikerWeekDay.setMinValue(0);
+  /*      numberPikerWeekDay.setMinValue(0);
         numberPikerWeekDay.setMaxValue(DayOfWeek.values().length - 1);
         numberPikerWeekDay.setDisplayedValues(days);
         numberPikerWeekDay.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
@@ -255,7 +258,7 @@ public class ProgramDialogFragment extends DialogFragment {
 
 
         numberPikerWeekDay.setOnValueChangedListener(myValChangedListener);
-
+*/
         if(toggleButton.isChecked()){
             timePicker.setHour(program.getEndTime().getHour());
             timePicker.setMinute(program.getEndTime().getMinute());
@@ -322,8 +325,7 @@ public class ProgramDialogFragment extends DialogFragment {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DayOfWeek selectedDay =  DayOfWeek.values()[numberPikerWeekDay.getValue()];
-                program.setWeekDay(selectedDay);
+                program.setActive(switchEnable.isChecked());
 
                 if(toggleButton.isChecked()){
                     program.setEndTime(LocalTime.of(timePicker.getHour(), timePicker.getMinute()));
@@ -332,7 +334,6 @@ public class ProgramDialogFragment extends DialogFragment {
                     program.setStartTime(LocalTime.of(timePicker.getHour(), timePicker.getMinute()));
                 }
 
-                program.setActive(true);
                 Thermostat thermostat = MainActivity.user.getSelectedThermostat();
                 Set<Program> programs = thermostat.getProgramMode().getPrograms();
 
@@ -369,16 +370,15 @@ public class ProgramDialogFragment extends DialogFragment {
             }
         });*/
 
-
-
+        switchEnable.setChecked(program.isActive());
+        switchEnable.setTextOn("Disattiva");
+        switchEnable.setTextOff("Attiva");
         return view;
     }
-
 
     void saveProgram(){
 
     }
-
 
     void deleteProgarm(){
 
