@@ -69,7 +69,7 @@ public class ProgramRecyclerViewAdapter extends RecyclerView.Adapter<ProgramRecy
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 program.setActive(isChecked);
-                HttpClient.putProgram(MainActivity.user.getSelectedThermostatId(), program, null, null);
+                //HttpClient.putProgram(MainActivity.user.getSelectedThermostatId(), program, null, null);
             }
         });
 
@@ -125,8 +125,8 @@ public class ProgramRecyclerViewAdapter extends RecyclerView.Adapter<ProgramRecy
                     public void onClick(DialogInterface dialog, int id) {
 
                         Thermostat thermostat = MainActivity.user.getSelectedThermostat();
-                        HttpClient.deleteProgram(thermostat.getId(), program, null, null);
-
+                      //  HttpClient.deleteProgram(thermostat.getId(), program, null, null);
+                        thermostat.getProgramMode().getPrograms().remove(program);
                         dialog.cancel();
 
                     }

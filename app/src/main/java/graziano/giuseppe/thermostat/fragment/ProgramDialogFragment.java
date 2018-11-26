@@ -339,14 +339,15 @@ public class ProgramDialogFragment extends DialogFragment {
 
                 for (Program p: programs) {
                     if (p.getId() > 0 && p.getId() == program.getId()) {
-                        HttpClient.putProgram(thermostat.getId(), program, null, null);
+
+                        //HttpClient.putProgram(thermostat.getId(), program, null, null);
                         // program.setProgramMode(thermostat.getProgramMode());
                         dismiss();
                         return;
                     }
                 }
-
-                HttpClient.postProgram(thermostat.getId(), program, null, null);
+                thermostat.getProgramMode().getPrograms().add(program);
+                //HttpClient.postProgram(thermostat.getId(), program, null, null);
                 dismiss();
 
 
@@ -360,15 +361,15 @@ public class ProgramDialogFragment extends DialogFragment {
             }
         });
 
-      /*  buttonDelete.setOnClickListener(new View.OnClickListener() {
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Thermostat thermostat = MainActivity.user.getSelectedThermostat();
-                HttpClient.deleteProgram(thermostat.getId(), program, null, null);
-
+               // HttpClient.deleteProgram(thermostat.getId(), program, null, null);
+                thermostat.getProgramMode().getPrograms().remove(program);
                 dismiss();
             }
-        });*/
+        });
 
         switchEnable.setChecked(program.isActive());
         switchEnable.setTextOn("Disattiva");

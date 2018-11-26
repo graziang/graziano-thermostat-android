@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#a3b1ef"
+    android:fitsSystemWindows="true">
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,32 +18,29 @@
     android:layout_height="match_parent">
 
 
+    <devs.mulham.horizontalcalendar.HorizontalCalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:textColorSelected="#FFFF"/>
+
     <TextView
         android:id="@+id/thermostatNameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:textColor="@color/colorTextPrimary"
-        android:textSize="25sp"
+        android:textSize="22sp"
         android:gravity="center"
-        android:layout_alignParentTop="true"/>
-
-    <TextView
-        android:id="@+id/thermostatLastMeasurementDateTextView"
-        android:layout_below="@id/thermostatNameTextView"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorTextPrimary"
-        android:textSize="13sp"
-        />
+        android:layout_below="@id/calendarView"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_above="@id/sensors_measurements_scrollview"
-        android:layout_below="@id/thermostatLastMeasurementDateTextView">
+        android:layout_below="@id/thermostatNameTextView">
 
     <pl.bclogic.pulsator4droid.library.PulsatorLayout
         android:id="@+id/pulsator"
@@ -99,4 +106,67 @@
         android:layout_marginBottom="70dp"
         app:dsv_orientation="horizontal" />
 
+
 </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical"
+        app:layout_behavior="@string/bottom_sheet_behavior"
+        app:behavior_peekHeight="90dp">
+
+
+
+        <Button
+            android:id="@+id/addProgram"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/white"
+            android:drawableLeft="@drawable/ic_add_button"
+            android:background="@android:color/transparent" />
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:textColor="@android:color/white"
+            android:textSize="20dp"
+            android:text="ACCENSIONE"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:textColor="@android:color/white"
+            android:textSize="20dp"
+            android:text="SPEGNIMENTO"/>
+
+
+
+        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="true"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="60dp"
+            android:paddingTop="@dimen/list_item_spacing_half"
+            tools:context=".fragment.ProgramListDialogFragment"
+            tools:listitem="@layout/fragment_program_list_dialog_item" />
+
+    </RelativeLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>
