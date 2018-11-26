@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,7 +18,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 
 import com.android.volley.Response;
@@ -30,6 +33,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -39,6 +43,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
@@ -75,7 +81,7 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
     private    HorizontalCalendar horizontalCalendar;
     List<Program> programs = new ArrayList<>();
     private DayOfWeek currentWeekDay = DayOfWeek.MONDAY;
-
+    private CircleSeekBar thermostatSeakBar;
 
     public ThermostatFragmentManual() {
         // Required empty public constructor
@@ -140,8 +146,13 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_thermostat_manual, container, false);
+
+        thermostatSeakBar = view.findViewById(R.id.thermostatSeekBar);
+
+
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -158,6 +169,7 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
 
         HorizontalCalendar horizontalCalendar = new HorizontalCalendar.Builder(view, R.id.calendarView)
                 .range(startDate, endDate)
+                .configure().showTopText(false).end()
                 .datesNumberOnScreen(5)
                 .build();
         currentWeekDay = LocalDate.now().getDayOfWeek();
@@ -183,6 +195,12 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 // React to state change
+                if(newState == 3){
+                  //  thermostatSeakBar.setClickable(false);
+                }
+                else if (newState == 2){
+                  //  thermostatSeakBar.setClickable(true);
+                }
             }
 
             @Override
@@ -190,14 +208,14 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
                 // React to dragging events
             }
         });
-
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+
 //        programs = new ArrayList<>(MainActivity.user.getSelectedThermostat().getProgramMode().getPrograms());
 
-        programRecyclerViewAdapter = new ProgramRecyclerViewAdapter(programs, getContext(), mListener);
+        programRecyclerViewAdapter = new ProgramRecyclerViewAdapter(programs, currentWeekDay, getContext(), mListener);
 //        programRecyclerViewAdapter.notify();
         recyclerView.setAdapter(programRecyclerViewAdapter);
 
@@ -214,6 +232,28 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
                 programDialogFragment.show(fm, "fragment_edit_name");
             }
         });
+
+        Thermostat thermostat = MainActivity.user.getSelectedThermostat();
+
+        if(thermostat != null) {
+
+            ToggleButton toggleButton = view.findViewById(R.id.toggleButton);
+            toggleButton.setChecked(thermostat.getMode().equals(Thermostat.MANUAL_MODE));
+
+
+            toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        thermostat.setMode(Thermostat.MANUAL_MODE);
+                    }
+                    else {
+                        thermostat.setMode(Thermostat.PROGRAM_MODE);
+                    }
+                }
+            });
+        }
+
         updatePrograms();
 
         return  view;
@@ -249,15 +289,16 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
             }
         });
 
+        programRecyclerViewAdapter.dayOfWeek = currentWeekDay;
         programRecyclerViewAdapter.notifyDataSetChanged();
 
     }
 
 
     public void initializeView(View view) {
-        CircleSeekBar thermostatSeakBar = view.findViewById(R.id.thermostatSeekBar);
+
         TextView thermostatTemperatureTextView = view.findViewById(R.id.thermostatTemperatureTextView);
-        TextView thermostatNameTextView = view.findViewById(R.id.thermostatNameTextView);
+      //  TextView thermostatNameTextView = view.findViewById(R.id.thermostatNameTextView);
         if(measurementsScrollView == null) {
 
             this.thermostatSensorRecyclerViewAdapter = new ThermostatSensorRecyclerViewAdapter(measurementsLast, getContext());
@@ -287,9 +328,9 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
         if(thermostat != null) {
 
 
+            getActivity().setTitle(thermostat.getName());
 
-            thermostatNameTextView.setText(thermostat.getName());
-
+         //   thermostatNameTextView.setText(thermostat.getName());
 
             int value = (int) (((thermostat.getTemperature() - MIN_THEMPERATURE) * thermostatSeakBar.getMaxProcess()) / (MAX_THEMPERATURE - MIN_THEMPERATURE));
             thermostatSeakBar.setCurProcess(value);
@@ -369,7 +410,45 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
             }
         });
 
-        /* starts before 1 month from now */
+        TextView textViewStato = (TextView)  view.findViewById(R.id.textViewStato);
+
+        String stato = "";
+
+        if(thermostat.isStateOn()){
+            textViewStato.setTextColor(getResources().getColor(R.color.colorActive));
+            stato = "RISCALDAMENTO ACCESO";
+        }
+        else {
+            textViewStato.setTextColor(getResources().getColor(R.color.colorNotActive));
+            LocalTime start = null;
+            LocalTime now = LocalTime.now();
+            LocalDate date = LocalDate.now();
+            for (Program program: thermostat.getProgramMode().getPrograms()){
+                if(program.isActive() && date.getDayOfWeek().equals(program.getWeekDay())){
+                    if(program.getStartTime().isAfter(now)){
+                        if(start == null){
+                            start = program.getStartTime();
+                        }
+                        else {
+                            if(program.getStartTime().isBefore(start)){
+                                start = program.getStartTime();
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(start != null) {
+                stato = "RISCALDAMENTO SPENTO.\n Sì accenderà alle " + start.toString();
+            }
+            else {
+                stato = "RISCALDAMENTO SPENTO";
+            }
+
+        }
+
+        textViewStato.setText(stato);
+
 
 
     }
@@ -424,6 +503,9 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
         if(response instanceof Thermostat){
             Thermostat thermostat = (Thermostat) response;
             MainActivity.user.getSelectedThermostat().setStateOn(thermostat.isStateOn());
+
+
+           // MainActivity.user.getSelectedThermostat().setProgramMode(thermostat.getProgramMode());
           //  MainActivity.user.getSelectedThermostat().setProgramMode(thermostat.getProgramMode());
             //MainActivity.user.getSelectedThermostat().setProgramMode(thermostat.getProgramMode());
             // getFragmentManager().beginTransaction().detach(this).attach(this).commit();
@@ -435,6 +517,7 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
                     public void run() {
                         if (thermostatTemperature == thermostat.getTemperature()) {
                             initializeView(getView());
+                            updatePrograms();
                         }
                     }
                 });

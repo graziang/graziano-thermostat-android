@@ -43,7 +43,9 @@ MainActivity extends AppCompatActivity implements SensorsFragment.OnListFragment
 
                     Thermostat thermostat = MainActivity.user.getSelectedThermostat();
                     if(thermostat != null){
-                        if(thermostat.getMode().equals(Thermostat.PROGRAM_MODE)){
+                        Fragment thermostatFragment = ThermostatFragmentProgram.newInstance();
+                        openFragment(thermostatFragment);
+                       /* if(thermostat.getMode().equals(Thermostat.PROGRAM_MODE)){
                             Fragment thermostatFragment = ThermostatFragmentProgram.newInstance();
                             openFragment(thermostatFragment);
                             return true;
@@ -52,7 +54,7 @@ MainActivity extends AppCompatActivity implements SensorsFragment.OnListFragment
                             Fragment thermostatFragment = ThermostatFragmentManual.newInstance();
                             openFragment(thermostatFragment);
                             return true;
-                        }
+                        }*/
                     }
 
                     Fragment thermostatFragment = ThermostatFragmentManual.newInstance();
@@ -76,16 +78,21 @@ MainActivity extends AppCompatActivity implements SensorsFragment.OnListFragment
     public void onResume(){
         super.onResume();
 
+
+
         Thermostat thermostat = MainActivity.user.getSelectedThermostat();
         if(thermostat != null){
-            if(thermostat.getMode().equals(Thermostat.PROGRAM_MODE)){
+
+            Fragment thermostatFragment = ThermostatFragmentManual.newInstance();
+            openFragment(thermostatFragment);
+           /* if(thermostat.getMode().equals(Thermostat.PROGRAM_MODE)){
                 Fragment thermostatFragment = ThermostatFragmentProgram.newInstance();
                 openFragment(thermostatFragment);
             }
             if(thermostat.getMode().equals(Thermostat.MANUAL_MODE)){
                 Fragment thermostatFragment = ThermostatFragmentManual.newInstance();
                 openFragment(thermostatFragment);
-            }
+            }*/
         }
 
 

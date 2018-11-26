@@ -162,10 +162,15 @@ public class ThermostatFragmentProgram extends Fragment implements Response.List
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        recyclerView.setOnFlingListener(new RecyclerView.OnFlingListener() {
+            @Override
+            public boolean onFling(int velocityX, int velocityY) {
+                return false;
+            }
+        });
 //        programs = new ArrayList<>(MainActivity.user.getSelectedThermostat().getProgramMode().getPrograms());
 
-        programRecyclerViewAdapter = new ProgramRecyclerViewAdapter(programs, getContext(), mListener);
+        programRecyclerViewAdapter = new ProgramRecyclerViewAdapter(programs, currentWeekDay, getContext(), mListener);
 //        programRecyclerViewAdapter.notify();
         recyclerView.setAdapter(programRecyclerViewAdapter);
 
@@ -338,7 +343,7 @@ public class ThermostatFragmentProgram extends Fragment implements Response.List
         //filtra per data
         programs.removeIf(p-> !p.getWeekDay().equals(currentWeekDay));
 
-
+       // programRecyclerViewAdapter.dayOfWeek = currentWeekDay;
         programRecyclerViewAdapter.notifyDataSetChanged();
 
 

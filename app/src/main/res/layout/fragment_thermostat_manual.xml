@@ -9,105 +9,121 @@
     android:background="#a3b1ef"
     android:fitsSystemWindows="true">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorBackground"
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
-
-
-    <devs.mulham.horizontalcalendar.HorizontalCalendarView
-        android:id="@+id/calendarView"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/mainView"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:background="@color/colorBackground"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:textColorSelected="#FFFF"/>
-
-    <TextView
-        android:id="@+id/thermostatNameTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:textColor="@color/colorTextPrimary"
-        android:textSize="22sp"
-        android:gravity="center"
-        android:layout_below="@id/calendarView"/>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_above="@id/sensors_measurements_scrollview"
-        android:layout_below="@id/thermostatNameTextView">
-
-    <pl.bclogic.pulsator4droid.library.PulsatorLayout
-        android:id="@+id/pulsator"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        app:pulse_count="4"
-        app:pulse_duration="3500"
-        app:pulse_repeat="0"
-        app:pulse_color="@color/colorActive"
-        app:pulse_startFromScratch="false"
-        app:pulse_interpolator="Decelerate">
-
-        <Button
-            android:id="@+id/status"
-            android:layout_width="00dp"
-            android:layout_height="00dp"
-            android:layout_margin="30dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/round_item"/>
+        android:orientation="vertical"
+        android:layout_height="match_parent">
 
 
+        <devs.mulham.horizontalcalendar.HorizontalCalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            app:textColorSelected="#FFFF"/>
 
-    </pl.bclogic.pulsator4droid.library.PulsatorLayout>
+        <ToggleButton
+            android:id="@+id/toggleButton"
+            android:layout_width="120dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="5dp"
+            android:textOn="Manuale"
+            android:textOff="Programma"
+            android:textAlignment="center"
+            android:layout_below="@id/calendarView"
+            android:textSize="16dp"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimary"
+            android:layout_margin="5dp"/>
 
-    <io.feeeei.circleseekbar.CircleSeekBar
-        android:id="@+id/thermostatSeekBar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="30dp"
-        android:layout_centerInParent="true"
-        app:wheel_reached_color="@color/colorCursorBar"
-        app:wheel_unreached_color="@color/colorBackgroundDark"
-        android:gravity="center"
-        app:wheel_scroll_only_one_circle="true"
-        app:wheel_reached_width="40dp"
-        app:wheel_unreached_width="40dp"
-        android:padding="8dp" >
+        <TextView
+            android:id="@+id/textViewStato"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="22sp"
+            android:gravity="center"
+            android:layout_below="@id/toggleButton"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_above="@id/sensors_measurements_scrollview"
+            android:layout_below="@id/textViewStato">
+
+            <pl.bclogic.pulsator4droid.library.PulsatorLayout
+                android:id="@+id/pulsator"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                app:pulse_count="4"
+                app:pulse_duration="3500"
+                app:pulse_repeat="0"
+                app:pulse_color="@color/colorActive"
+                app:pulse_startFromScratch="false"
+                app:pulse_interpolator="Decelerate">
+
+                <Button
+                    android:id="@+id/status"
+                    android:layout_width="00dp"
+                    android:layout_height="00dp"
+                    android:layout_margin="30dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/round_item"/>
 
 
-    </io.feeeei.circleseekbar.CircleSeekBar>
 
-    <TextView
-        android:id="@+id/thermostatTemperatureTextView"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorTextPrimary"
-        android:textSize="35sp"
-        />
+            </pl.bclogic.pulsator4droid.library.PulsatorLayout>
+
+            <io.feeeei.circleseekbar.CircleSeekBar
+                android:id="@+id/thermostatSeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:layout_centerInParent="true"
+                app:wheel_reached_color="@color/colorCursorBar"
+                app:wheel_unreached_color="@color/colorBackgroundDark"
+                android:gravity="center"
+                app:wheel_scroll_only_one_circle="true"
+                app:wheel_reached_width="40dp"
+                app:wheel_unreached_width="40dp"
+                android:padding="8dp" >
+
+
+            </io.feeeei.circleseekbar.CircleSeekBar>
+
+            <TextView
+                android:id="@+id/thermostatTemperatureTextView"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="35sp"
+                />
+
+
+        </RelativeLayout>
+
+
+        <com.yarolegovich.discretescrollview.DiscreteScrollView
+            android:id="@+id/sensors_measurements_scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="100dp"
+            app:dsv_orientation="horizontal" />
 
 
     </RelativeLayout>
-
-
-    <com.yarolegovich.discretescrollview.DiscreteScrollView
-        android:id="@+id/sensors_measurements_scrollview"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="70dp"
-        app:dsv_orientation="horizontal" />
-
-
-</RelativeLayout>
 
 
     <RelativeLayout
@@ -123,11 +139,11 @@
 
         <Button
             android:id="@+id/addProgram"
-            android:layout_width="40dp"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_centerHorizontal="true"
             android:textColor="@android:color/white"
-            android:drawableLeft="@drawable/ic_add_button"
+            android:drawableTop="@drawable/ic_add_button"
             android:background="@android:color/transparent" />
 
 
@@ -137,7 +153,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:textColor="@android:color/white"
             android:textSize="20dp"
             android:text="ACCENSIONE"/>
@@ -147,7 +163,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:textColor="@android:color/white"
             android:textSize="20dp"
             android:text="SPEGNIMENTO"/>

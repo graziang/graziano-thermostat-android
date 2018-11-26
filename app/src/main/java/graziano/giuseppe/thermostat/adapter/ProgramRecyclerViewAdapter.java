@@ -32,12 +32,14 @@ public class ProgramRecyclerViewAdapter extends RecyclerView.Adapter<ProgramRecy
 
     private Context context = null;
     private List<Program> programs;
+    public DayOfWeek dayOfWeek;
 
-    public ProgramRecyclerViewAdapter(List<Program> programs, Context context, ThermostatFragmentProgram.OnListFragmentInteractionListener listener) {
+    public ProgramRecyclerViewAdapter(List<Program> programs, DayOfWeek day, Context context, ThermostatFragmentProgram.OnListFragmentInteractionListener listener) {
 
         this.programs = programs;
         this.context = context;
         this.mListener = listener;
+        this.dayOfWeek = day;
     }
 
 
@@ -68,7 +70,9 @@ public class ProgramRecyclerViewAdapter extends RecyclerView.Adapter<ProgramRecy
         holder.activeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                program.setActive(isChecked);
+                if(program.getWeekDay().equals(dayOfWeek)) {
+                    program.setActive(isChecked);
+                }
                 //HttpClient.putProgram(MainActivity.user.getSelectedThermostatId(), program, null, null);
             }
         });
