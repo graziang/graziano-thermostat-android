@@ -166,45 +166,13 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
             @Override
             public void onDateSelected(Calendar date, int position) {
 
-
                 LocalDate calendarAsLocalDate = date.toInstant()
                         .atZone(date.getTimeZone().toZoneId())
                         .toLocalDate();
 
                 currentWeekDay = calendarAsLocalDate.getDayOfWeek();
 
-
-                programs.clear();
-                programs.addAll(MainActivity.user.getSelectedThermostat().getProgramMode().getPrograms());
-                //filtra per data
-                programs.removeIf(p-> !p.getWeekDay().equals(currentWeekDay));
-
-                programs.sort(new Comparator<Program>() {
-                    @TargetApi(Build.VERSION_CODES.O)
-                    @Override
-                    public int compare(Program o1, Program o2) {
-                        int day1index = Arrays.asList(DayOfWeek.values()).indexOf(o1.getWeekDay());
-                        int day2Index = Arrays.asList(DayOfWeek.values()).indexOf(o2.getWeekDay());
-                        if(day1index < day2Index){
-                            return -1;
-                        }
-                        if(day1index > day2Index){
-                            return 1;
-                        }
-
-                        if (o1.getStartTime().isBefore(o2.getStartTime())){
-                            return -1;
-                        }
-                        else{
-                            return 1;
-                        }
-
-                    }
-                });
-
-                programRecyclerViewAdapter.notifyDataSetChanged();
-
-
+                updatePrograms();
 
             }
         });
@@ -246,10 +214,45 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
                 programDialogFragment.show(fm, "fragment_edit_name");
             }
         });
-
+        updatePrograms();
 
         return  view;
     }
+    public void updatePrograms(){
+
+
+        programs.clear();
+        programs.addAll(MainActivity.user.getSelectedThermostat().getProgramMode().getPrograms());
+        //filtra per data
+        programs.removeIf(p-> !p.getWeekDay().equals(currentWeekDay));
+
+        programs.sort(new Comparator<Program>() {
+            @TargetApi(Build.VERSION_CODES.O)
+            @Override
+            public int compare(Program o1, Program o2) {
+                int day1index = Arrays.asList(DayOfWeek.values()).indexOf(o1.getWeekDay());
+                int day2Index = Arrays.asList(DayOfWeek.values()).indexOf(o2.getWeekDay());
+                if(day1index < day2Index){
+                    return -1;
+                }
+                if(day1index > day2Index){
+                    return 1;
+                }
+
+                if (o1.getStartTime().isBefore(o2.getStartTime())){
+                    return -1;
+                }
+                else{
+                    return 1;
+                }
+
+            }
+        });
+
+        programRecyclerViewAdapter.notifyDataSetChanged();
+
+    }
+
 
     public void initializeView(View view) {
         CircleSeekBar thermostatSeakBar = view.findViewById(R.id.thermostatSeekBar);
