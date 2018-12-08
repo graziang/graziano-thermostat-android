@@ -414,7 +414,15 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
 
         String stato = "";
 
-        if(thermostat.isStateOn()){
+        if(measurementsLast.size() == 0){
+                textViewStato.setTextColor(getResources().getColor(R.color.colorAccent));
+                stato = "TERMOSTATO OFFLINE";
+        }
+        else if(System.currentTimeMillis() - measurementsLast.get(1).getDate().getTime() > 60 * 1000 ){
+            textViewStato.setTextColor(getResources().getColor(R.color.colorAccent));
+            stato = "TERMOSTATO OFFLINE";
+        }
+        else if(thermostat.isStateOn()){
             textViewStato.setTextColor(getResources().getColor(R.color.colorActive));
             stato = "RISCALDAMENTO ACCESO";
         }

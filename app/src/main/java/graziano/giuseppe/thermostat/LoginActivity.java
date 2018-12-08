@@ -33,10 +33,12 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import graziano.giuseppe.thermostat.data.model.Thermostat;
 import graziano.giuseppe.thermostat.data.model.User;
 import graziano.giuseppe.thermostat.network.HttpClient;
 
@@ -175,6 +177,10 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
             editor.putString(User.PREFERENCE_USERNAME, MainActivity.user.getUsername());
             editor.putString(User.PREFERENCE_PASSWORD, MainActivity.user.getPassword());
             MainActivity.user = user;
+            for (Thermostat t: user.getThermostats()) {
+                FirebaseMessaging.getInstance().subscribeToTopic(String.valueOf(t.getId()));
+            }
+
 
             editor.commit();
            // showProgress(false);
