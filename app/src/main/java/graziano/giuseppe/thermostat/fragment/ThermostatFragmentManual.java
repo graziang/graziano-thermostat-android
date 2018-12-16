@@ -149,7 +149,6 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_thermostat_manual, container, false);
-
         thermostatSeakBar = view.findViewById(R.id.thermostatSeekBar);
 
 
@@ -167,7 +166,7 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
         Calendar endDate = Calendar.getInstance();
         endDate.add(Calendar.DAY_OF_YEAR, 7);
 
-        HorizontalCalendar horizontalCalendar = new HorizontalCalendar.Builder(view, R.id.calendarView)
+        horizontalCalendar = new HorizontalCalendar.Builder(view, R.id.calendarView)
                 .range(startDate, endDate)
                 .configure().showTopText(false).end()
                 .datesNumberOnScreen(5)
@@ -296,6 +295,36 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
 
 
     public void initializeView(View view) {
+
+     /*   if(horizontalCalendar == null){
+            Calendar startDate = Calendar.getInstance();
+            startDate.add(Calendar.DAY_OF_YEAR, -7);
+
+            Calendar endDate = Calendar.getInstance();
+            endDate.add(Calendar.DAY_OF_YEAR, 7);
+
+            horizontalCalendar = new HorizontalCalendar.Builder(view, R.id.calendarView)
+                    .range(startDate, endDate)
+                    .configure().showTopText(false).end()
+                    .datesNumberOnScreen(5)
+                    .build();
+            currentWeekDay = LocalDate.now().getDayOfWeek();
+
+            horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
+                @Override
+                public void onDateSelected(Calendar date, int position) {
+
+                    LocalDate calendarAsLocalDate = date.toInstant()
+                            .atZone(date.getTimeZone().toZoneId())
+                            .toLocalDate();
+
+                    currentWeekDay = calendarAsLocalDate.getDayOfWeek();
+
+                    updatePrograms();
+
+                }
+            });
+        }*/
 
         TextView thermostatTemperatureTextView = view.findViewById(R.id.thermostatTemperatureTextView);
       //  TextView thermostatNameTextView = view.findViewById(R.id.thermostatNameTextView);

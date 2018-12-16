@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 
 import graziano.giuseppe.thermostat.data.model.Program;
 import graziano.giuseppe.thermostat.data.model.Sensor;
@@ -30,7 +31,7 @@ public class
 MainActivity extends AppCompatActivity implements SensorsFragment.OnListFragmentInteractionListener, ThermostatFragmentProgram.OnListFragmentInteractionListener{
 
     public static User user = new User();
-
+    public long selectedItem = 0;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -40,11 +41,17 @@ MainActivity extends AppCompatActivity implements SensorsFragment.OnListFragment
             switch (item.getItemId()) {
                 case R.id.navigation_home:
 
-
                     Thermostat thermostat = MainActivity.user.getSelectedThermostat();
-                    if(thermostat != null){
-                        Fragment thermostatFragment = ThermostatFragmentProgram.newInstance();
-                        openFragment(thermostatFragment);
+                    if(thermostat != null && selectedItem == item.getItemId()){
+                        for (Thermostat t: MainActivity.user.getThermostats()){
+                            if(t.getId() != thermostat.getId()) {
+                                MainActivity.user.setSelectedThermostatId(t.getId());
+                                thermostat = user.getSelectedThermostat();
+                                HttpClient.putUserThermostat(MainActivity.user.getSelectedThermostatId(), null, null);
+                                break;
+                            }
+                        }
+
                        /* if(thermostat.getMode().equals(Thermostat.PROGRAM_MODE)){
                             Fragment thermostatFragment = ThermostatFragmentProgram.newInstance();
                             openFragment(thermostatFragment);
@@ -57,22 +64,28 @@ MainActivity extends AppCompatActivity implements SensorsFragment.OnListFragment
                         }*/
                     }
 
-                    Fragment thermostatFragment = ThermostatFragmentManual.newInstance();
-                    openFragment(thermostatFragment);
+                        Fragment thermostatFragment = ThermostatFragmentManual.newInstance();
+                        openFragment(thermostatFragment);
+
+                    selectedItem = item.getItemId();
                     return true;
                 case R.id.navigation_sensors:
                     Fragment sensorFragment = SensorsFragment.newInstance();
                     openFragment(sensorFragment);
+                    selectedItem = item.getItemId();
                     return true;
                 case R.id.navigation_settings:
                     Fragment settingsFragment = SettingsFragment.newInstance();
                     openFragment(settingsFragment);
+                    selectedItem = item.getItemId();
                     return true;
 
             }
+
             return false;
         }
     };
+
 
     @Override
     public void onResume(){
@@ -106,6 +119,7 @@ MainActivity extends AppCompatActivity implements SensorsFragment.OnListFragment
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
 
         HttpClient.initialize(this);
 

@@ -6,8 +6,7 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#a3b1ef"
-    android:fitsSystemWindows="true">
+    android:background="#a3b1ef">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/mainView"
