@@ -571,19 +571,25 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
                     return o1.getSensor().getName().compareTo(o2.getSensor().getName());
                 }
             });
-            float avg = 0;
-            for (Measurement measurement: measurements){
-                avg += measurement.getTemperature();
-            }
-            avg = avg / measurements.size();
-            Measurement measurementAgv = new Measurement();
-            measurementAgv.setTemperature(avg);
-            measurementAgv.setAvg(true);
-            measurements.add(0, measurementAgv);
+            if(measurements.size() > 0) {
 
-            this.measurementsLast.clear();
-            this.measurementsLast.addAll(measurements);
-            thermostatSensorRecyclerViewAdapter.notifyDataSetChanged();
+                float avg = 0;
+                for (Measurement measurement : measurements) {
+                    avg += measurement.getTemperature();
+                }
+                avg = avg / measurements.size();
+                Measurement measurementAgv = new Measurement();
+                measurementAgv.setTemperature(avg);
+                measurementAgv.setAvg(true);
+                measurements.add(0, measurementAgv);
+
+                this.measurementsLast.clear();
+                this.measurementsLast.addAll(measurements);
+                thermostatSensorRecyclerViewAdapter.notifyDataSetChanged();
+            }
+            else {
+                this.measurementsLast.clear();
+            }
         }
     }
 
