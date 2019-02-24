@@ -62,7 +62,19 @@ public class ThermostatSensorRecyclerViewAdapter extends RecyclerView.Adapter<Th
             holder.sensorNameTextView.setText(measurement.getSensor().getName());
         }
 
-        BigDecimal bd = new BigDecimal( measurement.getTemperature()).setScale(1, RoundingMode.HALF_EVEN);
+        if( measurement.getTemperature() < 0){
+            System.out.println(measurement.getTemperature());
+        }
+
+        BigDecimal bd = null;
+        try {
+            bd = new BigDecimal( measurement.getTemperature()).setScale(1, RoundingMode.HALF_EVEN);
+
+        }
+        catch (Exception e){
+            System.out.println(measurement.getTemperature());
+            return;
+        }
 
         holder.lastTemperatureMeasurementTextView.setText(String.format("%s°C", bd.floatValue()));
 
