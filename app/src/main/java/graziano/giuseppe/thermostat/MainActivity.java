@@ -120,8 +120,7 @@ MainActivity extends AppCompatActivity implements SensorsFragment.OnListFragment
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-
+        navigation.setSelectedItemId(R.id.navigation_home);
         HttpClient.initialize(this);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
