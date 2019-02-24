@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "501501076445",
+    "firebase_url": "https://grazianosmarthome.firebaseio.com",
+    "project_id": "grazianosmarthome",
+    "storage_bucket": "grazianosmarthome.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:501501076445:android:e97cfb0cfc2ac020",
+        "android_client_info": {
+          "package_name": "graziano.giuseppe.thermostat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "501501076445-mgv8ccl2i461k7vbr569pngs3lcr7gaf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqejMonNsbdQszpVgEQqf86RfWCON6wic"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
