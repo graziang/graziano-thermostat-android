@@ -15,6 +15,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import graziano.giuseppe.thermostat.data.model.Program;
 import graziano.giuseppe.thermostat.data.model.Sensor;
 import graziano.giuseppe.thermostat.data.model.Thermostat;
@@ -31,7 +34,7 @@ public class
 MainActivity extends AppCompatActivity implements SensorsFragment.OnListFragmentInteractionListener, ThermostatFragmentProgram.OnListFragmentInteractionListener{
 
     public static User user = new User();
-    public long selectedItem = 0;
+    public long selectedItem = R.id.navigation_home;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -90,8 +93,6 @@ MainActivity extends AppCompatActivity implements SensorsFragment.OnListFragment
     @Override
     public void onResume(){
         super.onResume();
-
-
 
         Thermostat thermostat = MainActivity.user.getSelectedThermostat();
         if(thermostat != null){
