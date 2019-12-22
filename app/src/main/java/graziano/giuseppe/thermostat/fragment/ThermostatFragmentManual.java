@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -261,7 +262,9 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
 
 
         programs.clear();
-        programs.addAll(MainActivity.user.getSelectedThermostat().getProgramMode().getPrograms());
+        if(MainActivity.user.getSelectedThermostat() != null) {
+            programs.addAll(MainActivity.user.getSelectedThermostat().getProgramMode().getPrograms());
+        }
         //filtra per data
         programs.removeIf(p-> !p.getWeekDay().equals(currentWeekDay));
 
@@ -427,6 +430,14 @@ public class ThermostatFragmentManual extends Fragment  implements Response.List
       //  PulsatorLayout pulsatorLayout = view.findViewById(R.id.pulsator);
        // pulsatorLayout.setAlpha(1);
        // pulsatorLayout.start();
+
+        thermostatSeakBar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return !thermostat.getMode().equals(Thermostat.MANUAL_MODE);
+            }
+        });
+
         thermostatSeakBar.setOnSeekBarChangeListener(new CircleSeekBar.OnSeekBarChangeListener() {
             @Override
             public void onChanged(CircleSeekBar circleSeekBar, int i) {

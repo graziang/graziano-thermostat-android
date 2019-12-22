@@ -26,6 +26,9 @@ public class Program implements Serializable{
     @JsonIgnore
     private ProgramMode programMode;
 
+    private float temperature;
+
+
     public long getId() {
         return id;
     }
@@ -112,6 +115,15 @@ public class Program implements Serializable{
 
     public void setProgramMode(ProgramMode programMode) {
         this.programMode = programMode;
+    }
+
+
+    public float getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(float temperature) {
+        this.temperature = temperature;
     }
 
     @Override

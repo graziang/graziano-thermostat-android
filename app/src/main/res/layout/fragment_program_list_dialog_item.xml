@@ -19,16 +19,16 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="10dp"
-        android:layout_centerVertical="true"
         android:textSize="28sp"
         android:textColor="@color/colorTextPrimary"
+        android:text="da"
         />
 
     <Switch
         android:id="@+id/activeSwitch"
         android:layout_width="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+
         android:layout_height="wrap_content" />
 
     <TextView
@@ -37,7 +37,23 @@
         android:layout_width="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
+
+        android:textSize="25sp"
+        android:textColor="@color/colorTextPrimary"
+        android:text="a"
+        />
+
+    <TextView
+        android:id="@+id/temperature_program"
+
+        android:text="asdf"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="100px"
+        android:layout_alignTop="@id/activeSwitch"
         android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
         android:textSize="25sp"
         android:textColor="@color/colorTextPrimary"
         />

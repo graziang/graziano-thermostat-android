@@ -67,6 +67,8 @@ public class ProgramRecyclerViewAdapter extends RecyclerView.Adapter<ProgramRecy
         holder.timeFromTextView.setText(timeFrom);
         holder.timeToTextView.setText(timeTo);
         holder.activeSwitch.setChecked(program.isActive());
+        holder.temperatureTextView.setText(String.format("%s°C", program.getTemperature()));
+
         holder.activeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -104,6 +106,7 @@ public class ProgramRecyclerViewAdapter extends RecyclerView.Adapter<ProgramRecy
 
         public TextView timeFromTextView;
         public TextView timeToTextView;
+        public TextView temperatureTextView;
         private Switch activeSwitch;
 
 
@@ -113,6 +116,7 @@ public class ProgramRecyclerViewAdapter extends RecyclerView.Adapter<ProgramRecy
             timeFromTextView = view.findViewById(R.id.timeFromTextView);
             timeToTextView = view.findViewById(R.id.timeToTextView);
             activeSwitch = view.findViewById(R.id.activeSwitch);
+            temperatureTextView = view.findViewById(R.id.temperature_program);
         }
     }
 

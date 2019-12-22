@@ -239,6 +239,40 @@ public class ProgramDialogFragment extends DialogFragment {
         toggleButton = (ToggleButton) view.findViewById(R.id.toggleButton);
         switchEnable = (Switch) view.findViewById(R.id.switchEnable);
 
+
+        NumberPicker np = view.findViewById(R.id.numberPicker);
+
+        np.setMinValue(30);
+        np.setMaxValue(60);
+
+        np.setOnValueChangedListener(new 	NumberPicker.OnValueChangeListener(){
+                @Override
+                public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+
+                    float value = Float.valueOf(numberPicker.getValue()) / 2.0f;
+                    System.out.println(value);
+                    program.setTemperature(value);
+                }
+            }
+        );
+        np.setValue(Math.round(program.getTemperature() * 2));
+        //np.setWrapSelectorWheel(true);
+
+
+        np.setFormatter(new NumberPicker.Formatter() {
+            @Override
+            public String format(int i) {
+                double r = i/2.0;
+                return String.valueOf(r);
+            }
+        });
+
+
+        View firstItem = np.getChildAt(0);
+        if (firstItem != null) {
+            firstItem.setVisibility(View.INVISIBLE);
+        }
+
         final String days[] = getResources().getStringArray(R.array.week_days);
 
 
